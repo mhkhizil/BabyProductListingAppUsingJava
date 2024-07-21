@@ -18,6 +18,8 @@ import com.google.android.material.navigation.NavigationView;
 
 import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 public class dashboardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private DrawerLayout drawerLayout;
@@ -43,7 +45,12 @@ public class dashboardActivity extends AppCompatActivity implements NavigationVi
                 R.string.close_nav);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+        // Get the header view
+        View headerView = navigationView.getHeaderView(0);
+        TextView nameTextView = headerView.findViewById(R.id.name_of_the_user);
 
+        // Set the username from Intent extras to the TextView
+        nameTextView.setText(username);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Home_Fragment()).commit();
             navigationView.setCheckedItem(R.id.nav_home);
