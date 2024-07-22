@@ -12,11 +12,11 @@ import java.util.List;
 
 public class DBContext extends SQLiteOpenHelper {
     //declaring database name
-    private static String DB_NAME="rentalU";
+    private static String DB_NAME="BabyBuyBabyProductListing";
 
     //declaring table name
-    private static String USER_TABLE="user_table";
-    private static String PROPERTY_TABLE="property_table";
+    private static String USERS_TABLE ="users_table";
+    private static String PRODUCT_LIST_TABLE ="product_list_table";
 
     //declaring column names for user_table
     private static String USER_ID="id";
@@ -28,8 +28,10 @@ public class DBContext extends SQLiteOpenHelper {
     private static String PROPERTY_TYPE="property_type";
     private static String NO_OF_ROOMS="no_of_rooms";
     private static String DATE="date";
-    private static String PRICE="rental_price";
     private static String FURNITURE_TYPE="type_of_furniture";
+
+    private static String PRODUCT_NAME="product_name";
+    private static String PRICE= "product_price";
     private static String REMARK="remark";
     private static String REPORTER_NAME="reporter_name";
 
@@ -40,14 +42,14 @@ public class DBContext extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db){
         //creating table for user
-        String user_create="CREATE TABLE "+USER_TABLE+"("+
+        String user_create="CREATE TABLE "+ USERS_TABLE +"("+
                 USER_ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"+
                 USER_NAME+" TEXT,"+USER_PASSWORD+" TEXT)";
 
         db.execSQL(user_create);
 
         //creating table for property
-        String property_create="CREATE TABLE "+PROPERTY_TABLE+"("+
+        String property_create="CREATE TABLE "+ PRODUCT_LIST_TABLE +"("+
                 PROPERTY_REF_NO+" INTEGER PRIMARY KEY AUTOINCREMENT,"+
                 PROPERTY_TYPE+" TEXT,"+NO_OF_ROOMS+" TEXT,"+
                 DATE+" TEXT,"+PRICE+" TEXT,"+
@@ -60,8 +62,8 @@ public class DBContext extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-        db.execSQL("DROP TABLE IF EXISTS "+USER_TABLE);
-        db.execSQL("DROP TABLE IF EXISTS "+PROPERTY_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS "+ USERS_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS "+ PRODUCT_LIST_TABLE);
 
     }
 
@@ -75,7 +77,7 @@ public class DBContext extends SQLiteOpenHelper {
 
         contentValues.put(USER_PASSWORD,password);
 
-        database.insert(USER_TABLE,null,contentValues);
+        database.insert(USERS_TABLE,null,contentValues);
         database.close();
     }
 
@@ -83,7 +85,7 @@ public class DBContext extends SQLiteOpenHelper {
     public ArrayList<UserModel> readUser()
     {
         SQLiteDatabase database=this.getReadableDatabase();
-        Cursor user_cursor=database.rawQuery("SELECT * FROM "+USER_TABLE,null);
+        Cursor user_cursor=database.rawQuery("SELECT * FROM "+ USERS_TABLE,null);
 
         ArrayList<UserModel> userModelArrayList=new ArrayList<>();
 
@@ -99,7 +101,7 @@ public class DBContext extends SQLiteOpenHelper {
     }
 
     //adding a new property to property table
-    public void addProperty(String property_type,String no_of_rooms,String date,String rental_price,String type_of_furniture,String remark,String reporter)
+    public void addProperty(String property_type,String no_of_rooms,String date,String product_price,String type_of_furniture,String remark,String reporter)
     {
         SQLiteDatabase database=this.getWritableDatabase();
         ContentValues contentValues=new ContentValues();
@@ -107,12 +109,12 @@ public class DBContext extends SQLiteOpenHelper {
         contentValues.put(PROPERTY_TYPE,property_type);
         contentValues.put(NO_OF_ROOMS,no_of_rooms);
         contentValues.put(DATE,date);
-        contentValues.put(PRICE,rental_price);
+        contentValues.put(PRICE,product_price);
         contentValues.put(FURNITURE_TYPE,type_of_furniture);
         contentValues.put(REMARK,remark);
         contentValues.put(REPORTER_NAME,reporter);
 
-        database.insert(PROPERTY_TABLE,null,contentValues);
+        database.insert(PRODUCT_LIST_TABLE,null,contentValues);
         database.close();
     }
 
@@ -120,7 +122,7 @@ public class DBContext extends SQLiteOpenHelper {
     public ArrayList<PropertyModel> readProperty()
     {
         SQLiteDatabase db=this.getReadableDatabase();
-        Cursor cursor=db.rawQuery("SELECT * FROM "+PROPERTY_TABLE,null);
+        Cursor cursor=db.rawQuery("SELECT * FROM "+ PRODUCT_LIST_TABLE,null);
         ArrayList<PropertyModel> property_modelArrayList=new ArrayList<>();
 
         if(cursor.moveToFirst())
@@ -141,7 +143,7 @@ public class DBContext extends SQLiteOpenHelper {
         SQLiteDatabase db=this.getReadableDatabase();
         String selection = PROPERTY_REF_NO+"=?";
         String[] selectionArgs = { ref_no };
-        Cursor cursor = db.query(PROPERTY_TABLE, null, selection, selectionArgs, null, null, null);
+        Cursor cursor = db.query(PRODUCT_LIST_TABLE, null, selection, selectionArgs, null, null, null);
         ArrayList<PropertyModel> property_modelArrayList=new ArrayList<>();
 
         if(cursor.moveToFirst())
@@ -161,7 +163,7 @@ public class DBContext extends SQLiteOpenHelper {
         SQLiteDatabase db=this.getReadableDatabase();
         String selection = PROPERTY_REF_NO+" LIKE ?";
         String[] selectionArgs = { "%" + ref_no + "%" };
-        Cursor cursor = db.query(PROPERTY_TABLE, null, selection, selectionArgs, null, null, null);
+        Cursor cursor = db.query(PRODUCT_LIST_TABLE, null, selection, selectionArgs, null, null, null);
         ArrayList<PropertyModel> property_modelArrayList=new ArrayList<>();
 
         if(cursor.moveToFirst())
@@ -182,11 +184,11 @@ public class DBContext extends SQLiteOpenHelper {
     public void deleteProperty(String ref_no)
     {
         SQLiteDatabase db=this.getWritableDatabase();
-        db.delete(PROPERTY_TABLE,"ref_no=?",new String[]{ref_no});
+        db.delete(PRODUCT_LIST_TABLE,"ref_no=?",new String[]{ref_no});
         db.close();
     }
 
-    public void updateProperty(String original_ref_no,int new_ref_no,String property_type,String no_of_rooms,String date,String rental_price,String type_of_furniture,String remark,String reporter)
+    public void updateProperty(String original_ref_no,int new_ref_no,String property_type,String no_of_rooms,String date,String product_price,String type_of_furniture,String remark,String reporter)
     {
         SQLiteDatabase db=this.getWritableDatabase();
         ContentValues contentValues=new ContentValues();
@@ -195,12 +197,12 @@ public class DBContext extends SQLiteOpenHelper {
         contentValues.put(PROPERTY_TYPE,property_type);
         contentValues.put(NO_OF_ROOMS,no_of_rooms);
         contentValues.put(DATE,date);
-        contentValues.put(PRICE,rental_price);
+        contentValues.put(PRICE,product_price);
         contentValues.put(FURNITURE_TYPE,type_of_furniture);
         contentValues.put(REMARK,remark);
         contentValues.put(REPORTER_NAME,reporter);
 
-        db.update(PROPERTY_TABLE,contentValues,"ref_no=?",new String[]{original_ref_no});
+        db.update(PRODUCT_LIST_TABLE,contentValues,"ref_no=?",new String[]{original_ref_no});
 
     }
     public List<String> getTableList() {
