@@ -3,6 +3,8 @@ package UI;
 
 
 
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -13,7 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-
+import android.view.View;
 import androidx.recyclerview.widget.RecyclerView;
 
 
@@ -24,9 +26,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.assignment.R;
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,6 +119,51 @@ public class Property_Fragment extends Fragment implements PropertyClickListener
                 transaction.commit();
             }
         });
+        ImageView backButton = property_view.findViewById(R.id.back_icon_to_home_page);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Choose one of the following options based on your HomeScreen structure:
+
+                // Option 1: HomeScreen is a Fragment
+//               getActivity().getSupportFragmentManager().popBackStack();
+
+                //Option 2: HomeScreen is an Activity
+//                 Intent intent = new Intent(getActivity(), Home_Fragment.class);
+//                startActivity(intent);
+//                 getActivity().finish();
+                // Option 1: Home Screen is a Fragment
+//                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//                Home_Fragment homeFragment = (Home_Fragment) fragmentManager.findFragmentByTag("HomeFragmentTag"); // Replace with your tag
+//                if (homeFragment != null) {
+//                    fragmentManager.beginTransaction()
+//                            .replace(R.id.fragment_container, homeFragment) // Replace with your container ID
+//                            .commit();
+//                }
+
+                if (getActivity() instanceof FragmentActivity) {
+                    FragmentActivity activity = (FragmentActivity) getActivity(); // Declare the activity variable here
+
+
+                   activity.getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragment_container, new Home_Fragment()) // Replace with your container ID
+                            .commit();
+                    // Highlight the Home item in the navigation drawer
+                    NavigationView navigationView = activity.findViewById(R.id.nav_view); // Get NavigationView from activity
+                    if (navigationView != null) {
+                        navigationView.setCheckedItem(R.id.nav_home);
+                    }
+                }
+         }
+        });
+
+//        back_icon_to_home_page.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                getActivity().getSupportFragmentManager().popBackStack();
+//            }
+//        });
 
 
 

@@ -10,11 +10,15 @@
     android:layout_marginHorizontal="10dp"
     android:layout_marginVertical="10dp"
     app:cardCornerRadius="10dp"
-    app:cardElevation="8dp">
+    app:cardElevation="8dp"
+    android:background="@drawable/custom_edit_text"
+    >
 
     <RelativeLayout
         android:layout_width="399dp"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+
+        >
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/property_Image"
@@ -36,7 +40,7 @@
             android:layout_marginTop="20dp"
             android:layout_toEndOf="@id/property_Image"
             android:text="Title"
-            android:textColor="@color/purple_700"
+            android:textColor="@color/bluish_green"
             android:textSize="20sp" />
 
     </RelativeLayout>

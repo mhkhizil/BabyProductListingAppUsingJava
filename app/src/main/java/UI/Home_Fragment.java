@@ -1,5 +1,6 @@
 package UI;
 
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.assignment.R;
+import com.google.android.material.navigation.NavigationView;
 
 public class Home_Fragment extends Fragment {
 
@@ -37,6 +39,16 @@ public class Home_Fragment extends Fragment {
                 transaction.replace(R.id.fragment_container, p_form_fragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
+                if (getActivity() instanceof FragmentActivity) {
+                    FragmentActivity activity = (FragmentActivity) getActivity();
+                    // Check for null savedInstanceState within the FragmentActivity
+
+                        NavigationView navigationView = activity.findViewById(R.id.nav_view);
+                        if (navigationView != null) {
+                            navigationView.setCheckedItem(R.id.nav_property);
+                        }
+
+                }
             }
         });
 
