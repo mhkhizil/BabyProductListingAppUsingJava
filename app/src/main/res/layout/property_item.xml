@@ -43,6 +43,20 @@
             android:textColor="@color/bluish_green"
             android:textSize="20sp" />
 
+        <TextView
+            android:id="@+id/purchase_status"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:layout_alignTop="@id/property_Title"
+            android:layout_marginStart="0dp"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/property_Title"
+
+            android:textColor="@color/bluish_green"
+            android:textSize="10sp" />
+
+
+
     </RelativeLayout>
     
 </androidx.cardview.widget.CardView>

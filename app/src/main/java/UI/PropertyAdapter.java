@@ -44,6 +44,14 @@ public class PropertyAdapter extends RecyclerView.Adapter<MyViewHolder> {
                         : dataList.get(position).getProductName()
         );
 
+        if (dataList.get(position).isPurchased()) {  // Assuming your boolean field is named 'isPurchased'
+            holder.purchase_status.setText("Purchased");
+            holder.purchase_status.setTextColor(context.getResources().getColor(R.color.mid_green)); // Set to green
+        } else {
+            holder.purchase_status.setText("Not Purchased");
+            holder.purchase_status.setTextColor(context.getResources().getColor(R.color.red));
+        }
+
 
     }
 
@@ -56,7 +64,7 @@ public class PropertyAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
 }
 class MyViewHolder extends RecyclerView.ViewHolder{
-
+    TextView purchase_status;
     TextView property_title;
     CardView property_Card;
     public MyViewHolder(@NonNull View itemView,PropertyClickListener propertyClickListener) {
@@ -66,6 +74,7 @@ class MyViewHolder extends RecyclerView.ViewHolder{
 //        recDesc = itemView.findViewById(R.id.recDesc);
 //        recLang = itemView.findViewById(R.id.recLang);
         property_title = itemView.findViewById(R.id.property_Title);
+        purchase_status=itemView.findViewById(R.id.purchase_status);
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

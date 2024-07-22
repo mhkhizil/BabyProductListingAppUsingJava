@@ -10,6 +10,7 @@ public class PropertyModel {
     private String price;
     private String remark;
     private String user_name;
+    private boolean purchased;
 
     public String getFurniture() {
         return furniture;
@@ -83,12 +84,19 @@ public class PropertyModel {
         this.user_name = user_name;
     }
 
+    public boolean isPurchased() {
+        return purchased;
+    }
+
+    public void setPurchased(boolean purchased) {
+        this.purchased = purchased;
+    }
 
     // constructor
     public PropertyModel(int ref_no,String type,
                          String rooms,
                          String date,String product_name,
-                         String price, String furniture, String remark, String user_name)
+                         String price, String furniture, String remark, String user_name,boolean purchased)
     {
         this.ref_no=ref_no;
         this.type = type;
@@ -99,5 +107,6 @@ public class PropertyModel {
         this.furniture = furniture;
         this.remark = remark;
         this.user_name = user_name;
+        this.purchased = purchased;
     }
 }

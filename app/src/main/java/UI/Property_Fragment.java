@@ -21,6 +21,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -43,6 +44,7 @@ public class Property_Fragment extends Fragment implements PropertyClickListener
     String username="";
     String password="";
     EditText search_text;
+
 
 
     @Override

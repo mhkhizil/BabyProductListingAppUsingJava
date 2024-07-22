@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -36,6 +37,7 @@ public class Property_Form_Fragment extends Fragment {
     Button save_btn;
     Button delete_btn;
     Button cancel_btn;
+    private CheckBox cbPurchased;
     public String current_mode;
     public String current_username;
     DBContext dbContext;
@@ -75,6 +77,7 @@ public class Property_Form_Fragment extends Fragment {
         price=form_view.findViewById(R.id.price);
         remark=form_view.findViewById(R.id.remark);
         reporter=form_view.findViewById(R.id.reporter_name);
+        cbPurchased =form_view.findViewById(R.id.cbPurchased );
         date_time_picker=form_view.findViewById(R.id.date);
         save_btn=form_view.findViewById(R.id.save_btn);
         delete_btn=form_view.findViewById(R.id.delete_btn);
@@ -103,6 +106,7 @@ public class Property_Form_Fragment extends Fragment {
             price.setText(property_list.get(0).getPrice());
             furniture_type_spinner.setSelection(furniture_type_adapter.getPosition(fur_type));
             remark.setText(property_list.get(0).getRemark());
+            cbPurchased.setChecked(property_list.get(0).isPurchased());
             reporter.setText(property_list.get(0).getUserName());
         }
 
@@ -187,13 +191,14 @@ public class Property_Form_Fragment extends Fragment {
                 String fur_type=furniture_type_spinner.getSelectedItem().toString();
                 String rem=remark.getText().toString();
                 String rp_name=reporter.getText().toString();
+                boolean pc=cbPurchased.isChecked();
 
                 if(prop_type.isEmpty() || bedroom.isEmpty() || add_date.isEmpty()|| pn.isEmpty() || pr.isEmpty() || fur_type.isEmpty() || rem.isEmpty())
                 {
                     Toast.makeText(Property_Form_Fragment.this.getActivity(), "Enter all data", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                        dbContext.addProductList(prop_type,bedroom,add_date,pn,pr,fur_type,rem,rp_name);
+                        dbContext.addProductList(prop_type,bedroom,add_date,pn,pr,fur_type,rem,rp_name,pc);
                       //  Toast.makeText(Property_Form_Fragment.this.getActivity(), "New property added successfully", Toast.LENGTH_SHORT).show();
                     FragmentManager fragmentManager= getActivity().getSupportFragmentManager();
                     fragmentManager.popBackStack();
@@ -208,7 +213,8 @@ public class Property_Form_Fragment extends Fragment {
                 String fur_type=furniture_type_spinner.getSelectedItem().toString();
                 String rem=remark.getText().toString();
                 String rp_name=reporter.getText().toString();
-                dbContext.updateProductList(reference_no,Integer.parseInt(reference_no) ,prop_type,bedroom,add_date,pn,pr,fur_type,rem,rp_name);
+                boolean pc=cbPurchased.isChecked();
+                dbContext.updateProductList(reference_no,Integer.parseInt(reference_no) ,prop_type,bedroom,add_date,pn,pr,fur_type,rem,rp_name,pc);
                 FragmentManager fragmentManager= getActivity().getSupportFragmentManager();
                 fragmentManager.popBackStack();
             }

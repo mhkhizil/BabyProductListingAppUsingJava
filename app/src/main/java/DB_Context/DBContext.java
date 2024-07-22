@@ -30,10 +30,12 @@ public class DBContext extends SQLiteOpenHelper {
     private static String DATE="date";
     private static String FURNITURE_TYPE="type_of_furniture";
 
+
     private static String PRODUCT_NAME="product_name";
     private static String PRICE= "product_price";
     private static String REMARK="remark";
     private static String REPORTER_NAME="reporter_name";
+    private static String PURCHASED = "purchased";
 
     public DBContext(Context context){
         super(context,DB_NAME,null,1);
@@ -54,7 +56,7 @@ public class DBContext extends SQLiteOpenHelper {
                 PROPERTY_TYPE+" TEXT,"+NO_OF_ROOMS+" TEXT,"+
                 DATE+" TEXT,"+PRODUCT_NAME+" TEXT,"+PRICE+" TEXT,"+
                 FURNITURE_TYPE+" TEXT,"+REMARK+" TEXT,"+
-                REPORTER_NAME+" TEXT)";
+                REPORTER_NAME+" TEXT,"+ PURCHASED + " INTEGER)";
 
         db.execSQL(property_create);
     }
@@ -101,7 +103,7 @@ public class DBContext extends SQLiteOpenHelper {
     }
 
     //adding a new property to property table
-    public void addProductList(String property_type, String no_of_rooms, String date, String product_name, String product_price, String type_of_furniture, String remark, String reporter)
+    public void addProductList(String property_type, String no_of_rooms, String date, String product_name, String product_price, String type_of_furniture, String remark, String reporter,boolean purchased)
     {
         SQLiteDatabase database=this.getWritableDatabase();
         ContentValues contentValues=new ContentValues();
@@ -114,7 +116,7 @@ public class DBContext extends SQLiteOpenHelper {
         contentValues.put(FURNITURE_TYPE,type_of_furniture);
         contentValues.put(REMARK,remark);
         contentValues.put(REPORTER_NAME,reporter);
-
+        contentValues.put(PURCHASED, purchased ? 1 : 0);
         database.insert(PRODUCT_LIST_TABLE,null,contentValues);
         database.close();
     }
@@ -132,7 +134,7 @@ public class DBContext extends SQLiteOpenHelper {
                 property_modelArrayList.add(new PropertyModel(cursor.getInt(0),cursor.getString(1),
                         cursor.getString(2),cursor.getString(3),
                         cursor.getString(4),cursor.getString(5),
-                        cursor.getString(6),cursor.getString(7),cursor.getString(8)));
+                        cursor.getString(6),cursor.getString(7),cursor.getString(8), cursor.getInt(9) == 1));
 
             }while (cursor.moveToNext());
         }
@@ -153,7 +155,7 @@ public class DBContext extends SQLiteOpenHelper {
                 property_modelArrayList.add(new PropertyModel(cursor.getInt(0),cursor.getString(1),
                         cursor.getString(2),cursor.getString(3),
                         cursor.getString(4),cursor.getString(5),
-                        cursor.getString(6),cursor.getString(7),cursor.getString(8)));
+                        cursor.getString(6),cursor.getString(7),cursor.getString(8),cursor.getInt(9) == 1));
 
             }while (cursor.moveToNext());
         }
@@ -173,7 +175,7 @@ public class DBContext extends SQLiteOpenHelper {
                 property_modelArrayList.add(new PropertyModel(cursor.getInt(0),cursor.getString(1),
                         cursor.getString(2),cursor.getString(3),
                         cursor.getString(4),cursor.getString(5),
-                        cursor.getString(6),cursor.getString(7),cursor.getString(8)));
+                        cursor.getString(6),cursor.getString(7),cursor.getString(8),cursor.getInt(9) == 1));
 
             }while (cursor.moveToNext());
         }
@@ -189,7 +191,7 @@ public class DBContext extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void updateProductList(String original_ref_no, int new_ref_no, String property_type, String no_of_rooms, String date, String product_name, String product_price, String type_of_furniture, String remark, String reporter)
+    public void updateProductList(String original_ref_no, int new_ref_no, String property_type, String no_of_rooms, String date, String product_name, String product_price, String type_of_furniture, String remark, String reporter,boolean purchased)
     {
         SQLiteDatabase db=this.getWritableDatabase();
         ContentValues contentValues=new ContentValues();
@@ -203,6 +205,7 @@ public class DBContext extends SQLiteOpenHelper {
         contentValues.put(FURNITURE_TYPE,type_of_furniture);
         contentValues.put(REMARK,remark);
         contentValues.put(REPORTER_NAME,reporter);
+        contentValues.put(PURCHASED, purchased ? 1 : 0);
 
         db.update(PRODUCT_LIST_TABLE,contentValues,"ref_no=?",new String[]{original_ref_no});
 
