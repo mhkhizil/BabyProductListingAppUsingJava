@@ -111,7 +111,7 @@ public class Property_Form_Fragment extends Fragment {
             price.setText(property_list.get(0).getPrice());
             furniture_type_spinner.setSelection(furniture_type_adapter.getPosition(fur_type));
             remark.setText(property_list.get(0).getRemark());
-            reporter.setText(property_list.get(0).getName());
+            reporter.setText(property_list.get(0).getUserName());
         }
 
         reporter.setText(current_username);

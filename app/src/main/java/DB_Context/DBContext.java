@@ -30,7 +30,7 @@ public class DBContext extends SQLiteOpenHelper {
     private static String DATE="date";
     private static String FURNITURE_TYPE="type_of_furniture";
 
-    private static String PRODUCT_NAME="product_name";
+    private static String PRODUCT_NAME="product_name";//p mha htl ml
     private static String PRICE= "product_price";
     private static String REMARK="remark";
     private static String REPORTER_NAME="reporter_name";

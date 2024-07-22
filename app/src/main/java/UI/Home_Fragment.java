@@ -30,8 +30,8 @@ public class Home_Fragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
-                bundle.putString("mode", "add_mode");
-                bundle.putString("username", "your_username");
+                bundle.putString("mode", "add_mode");//have to deleted this line delete
+                bundle.putString("username", "your_username");//have to delete this lineto delete
 
                 Property_Fragment p_fragment = new Property_Fragment();
                 p_fragment.setArguments(bundle);
