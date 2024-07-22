@@ -4,11 +4,8 @@ package UI;
 
 
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,12 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.assignment.R;
 import com.google.android.material.navigation.NavigationView;
@@ -70,7 +65,7 @@ public class Property_Fragment extends Fragment implements PropertyClickListener
         search_text=property_view.findViewById(R.id.property_search);
         dbContext=new DBContext(Property_Fragment.this.getActivity());
         property_list = new ArrayList<>();
-        property_list=dbContext.readProperty();
+        property_list=dbContext.readProductList();
         adapter=new PropertyAdapter(getContext(),property_list,this);
         recyclerView.setAdapter(adapter);
 
@@ -94,7 +89,7 @@ public class Property_Fragment extends Fragment implements PropertyClickListener
                 // This method is called when the text is changed.
                 // You can get the text using the `s` parameter.
                 String newText = s.toString();
-                property_list= dbContext.search_Property_by_ref_no(newText);
+                property_list= dbContext.searchProductByRefNo(newText);
                 adapter=new PropertyAdapter(getContext(),property_list,Property_Fragment.this);
                 recyclerView.setAdapter(adapter);
             }

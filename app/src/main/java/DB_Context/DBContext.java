@@ -101,7 +101,7 @@ public class DBContext extends SQLiteOpenHelper {
     }
 
     //adding a new property to property table
-    public void addProperty(String property_type,String no_of_rooms,String date, String product_name,String product_price,String type_of_furniture,String remark,String reporter)
+    public void addProductList(String property_type, String no_of_rooms, String date, String product_name, String product_price, String type_of_furniture, String remark, String reporter)
     {
         SQLiteDatabase database=this.getWritableDatabase();
         ContentValues contentValues=new ContentValues();
@@ -120,7 +120,7 @@ public class DBContext extends SQLiteOpenHelper {
     }
 
     //reading data from property
-    public ArrayList<PropertyModel> readProperty()
+    public ArrayList<PropertyModel> readProductList()
     {
         SQLiteDatabase db=this.getReadableDatabase();
         Cursor cursor=db.rawQuery("SELECT * FROM "+ PRODUCT_LIST_TABLE,null);
@@ -140,7 +140,7 @@ public class DBContext extends SQLiteOpenHelper {
         return property_modelArrayList;
     }
 
-    public ArrayList<PropertyModel> readProperty_by_ref_no(String ref_no){
+    public ArrayList<PropertyModel> readProductByRefNumber(String ref_no){
         SQLiteDatabase db=this.getReadableDatabase();
         String selection = PROPERTY_REF_NO+"=?";
         String[] selectionArgs = { ref_no };
@@ -160,7 +160,7 @@ public class DBContext extends SQLiteOpenHelper {
         db.close();
         return property_modelArrayList;
     }
-    public ArrayList<PropertyModel> search_Property_by_ref_no(String ref_no){
+    public ArrayList<PropertyModel> searchProductByRefNo(String ref_no){
         SQLiteDatabase db=this.getReadableDatabase();
         String selection = PROPERTY_REF_NO+" LIKE ?";
         String[] selectionArgs = { "%" + ref_no + "%" };
@@ -182,14 +182,14 @@ public class DBContext extends SQLiteOpenHelper {
     }
 
     //delete property form property table
-    public void deleteProperty(String ref_no)
+    public void deleteProductList(String ref_no)
     {
         SQLiteDatabase db=this.getWritableDatabase();
         db.delete(PRODUCT_LIST_TABLE,"ref_no=?",new String[]{ref_no});
         db.close();
     }
 
-    public void updateProperty(String original_ref_no,int new_ref_no,String property_type,String no_of_rooms,String date,String product_name,String product_price,String type_of_furniture,String remark,String reporter)
+    public void updateProductList(String original_ref_no, int new_ref_no, String property_type, String no_of_rooms, String date, String product_name, String product_price, String type_of_furniture, String remark, String reporter)
     {
         SQLiteDatabase db=this.getWritableDatabase();
         ContentValues contentValues=new ContentValues();

@@ -1,34 +1,23 @@
 package UI;
 
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
-import android.provider.CalendarContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.assignment.R;
-import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker;
-import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePickerDialog;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import DB_Context.DBContext;
 import DB_Context.PropertyModel;
@@ -102,7 +91,7 @@ public class Property_Form_Fragment extends Fragment {
            reference_no=bundle.getString("ref_no");
             ref_no.setText("Item number:"+reference_no);
             ref_no.setEnabled(false);
-            property_list=dbContext.readProperty_by_ref_no(reference_no);
+            property_list=dbContext.readProductByRefNumber(reference_no);
             PropertyModel p=property_list.get(0);
             String prop_type=p.getType().toString();
             String bed_type=p.getRooms();
@@ -204,7 +193,7 @@ public class Property_Form_Fragment extends Fragment {
                     Toast.makeText(Property_Form_Fragment.this.getActivity(), "Enter all data", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                        dbContext.addProperty(prop_type,bedroom,add_date,pn,pr,fur_type,rem,rp_name);
+                        dbContext.addProductList(prop_type,bedroom,add_date,pn,pr,fur_type,rem,rp_name);
                       //  Toast.makeText(Property_Form_Fragment.this.getActivity(), "New property added successfully", Toast.LENGTH_SHORT).show();
                     FragmentManager fragmentManager= getActivity().getSupportFragmentManager();
                     fragmentManager.popBackStack();
@@ -219,7 +208,7 @@ public class Property_Form_Fragment extends Fragment {
                 String fur_type=furniture_type_spinner.getSelectedItem().toString();
                 String rem=remark.getText().toString();
                 String rp_name=reporter.getText().toString();
-                dbContext.updateProperty(reference_no,Integer.parseInt(reference_no) ,prop_type,bedroom,add_date,pn,pr,fur_type,rem,rp_name);
+                dbContext.updateProductList(reference_no,Integer.parseInt(reference_no) ,prop_type,bedroom,add_date,pn,pr,fur_type,rem,rp_name);
                 FragmentManager fragmentManager= getActivity().getSupportFragmentManager();
                 fragmentManager.popBackStack();
             }
@@ -229,7 +218,7 @@ public class Property_Form_Fragment extends Fragment {
         delete_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            dbContext.deleteProperty(reference_no);
+            dbContext.deleteProductList(reference_no);
             FragmentManager fragmentManager= getActivity().getSupportFragmentManager();
             fragmentManager.popBackStack();
             }
