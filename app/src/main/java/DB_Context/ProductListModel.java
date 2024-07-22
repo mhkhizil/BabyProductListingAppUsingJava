@@ -2,7 +2,7 @@ package DB_Context;
 
 public class ProductListModel {
     private String type;
-    private String rooms;
+
     private String date;
     private int ref_no;
     private String furniture;
@@ -26,16 +26,6 @@ public class ProductListModel {
     public void setType(String type)
     {
         this.type = type;
-    }
-
-    public String getRooms()
-    {
-        return rooms;
-    }
-
-    public void setRooms(String rooms)
-    {
-        this.rooms = rooms;
     }
 
     public String getDate() { return date; }
@@ -94,13 +84,11 @@ public class ProductListModel {
 
     // constructor
     public ProductListModel(int ref_no, String type,
-                            String rooms,
                             String date, String product_name,
                             String price, String furniture, String remark, String user_name, boolean purchased)
     {
         this.ref_no=ref_no;
         this.type = type;
-        this.rooms = rooms;
         this.date = date;
         this.product_name = product_name;
         this.price = price;

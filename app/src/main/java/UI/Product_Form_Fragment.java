@@ -27,7 +27,6 @@ import DB_Context.ProductListModel;
 public class Product_Form_Fragment extends Fragment {
     Spinner property_type_spinner;
     Spinner furniture_type_spinner;
-    Spinner bedrooms_spinner;
     EditText date_time_picker;
     EditText ref_no;
     EditText product_name;
@@ -57,18 +56,15 @@ public class Product_Form_Fragment extends Fragment {
         }
 
         View form_view=inflater.inflate(R.layout.product_form_fragment, container, false);
-        String[] bedroom_items = {"Select bedroom type", "Studio","One","Two"};
         String[] furniture_type_items = {"Select furniture type", "Furnished","Unfurnished","Part Furnished"};
         String[] property_type_items = {"Select property type", "Flat","House","Bungalow"};
-        ArrayAdapter<String> bedroom_adapter=new ArrayAdapter<>(Product_Form_Fragment.this.getActivity(), android.R.layout.simple_spinner_dropdown_item,bedroom_items);
         ArrayAdapter<String> property_type_adapter=new ArrayAdapter<>(Product_Form_Fragment.this.getActivity(), android.R.layout.simple_spinner_dropdown_item,property_type_items);
         ArrayAdapter<String> furniture_type_adapter=new ArrayAdapter<>(Product_Form_Fragment.this.getActivity(), android.R.layout.simple_spinner_dropdown_item,furniture_type_items);
         property_type_spinner=form_view.findViewById(R.id.property_type);
         furniture_type_spinner=form_view.findViewById(R.id.furniture_type);
-        bedrooms_spinner=form_view.findViewById(R.id.bedroom);
         property_type_spinner.setAdapter(property_type_adapter);
         furniture_type_spinner.setAdapter(furniture_type_adapter);
-        bedrooms_spinner.setAdapter(bedroom_adapter);
+
 
         dbContext=new DBContext(Product_Form_Fragment.this.getActivity());
         ref_no_layout=form_view.findViewById(R.id.reference_no_layout);
@@ -97,10 +93,8 @@ public class Product_Form_Fragment extends Fragment {
             property_list=dbContext.readProductByRefNumber(reference_no);
             ProductListModel p=property_list.get(0);
             String prop_type=p.getType().toString();
-            String bed_type=p.getRooms();
             String fur_type=p.getFurniture();
             property_type_spinner.setSelection(property_type_adapter.getPosition(prop_type));
-            bedrooms_spinner.setSelection(bedroom_adapter.getPosition(bed_type));
             date_time_picker.setText(property_list.get(0).getDate());
             product_name.setText(property_list.get(0).getProductName());
             price.setText(property_list.get(0).getPrice());
@@ -113,30 +107,6 @@ public class Product_Form_Fragment extends Fragment {
         reporter.setText(current_username);
         final Calendar calendar=Calendar.getInstance();
 
-//        date_time_picker.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
-//                    @Override
-//                    public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
-//                        // Update the Calendar with the selected date
-//                        calendar.set(Calendar.YEAR, year);
-//                        calendar.set(Calendar.MONTH, monthOfYear);
-//                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-//                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-//                        String selectedDateString = dateFormat.format(calendar.getTime());
-//                        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-//                        String currentTimeString = timeFormat.format(calendar.getTime());
-//                        date_time_picker.setText(selectedDateString+" "+currentTimeString);
-//                    }
-//
-//                };
-//                DatePickerDialog datePickerDialog = new DatePickerDialog(Property_Form_Fragment.this.getActivity(), dateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-//
-//                // Show the DatePickerDialog
-//                datePickerDialog.show();
-//            }
-//        });
         date_time_picker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -184,7 +154,6 @@ public class Product_Form_Fragment extends Fragment {
             if(current_mode=="add_mode"){
                 //should add trim later
                 String prop_type=property_type_spinner.getSelectedItem().toString();
-                String bedroom=bedrooms_spinner.getSelectedItem().toString();
                 String add_date=date_time_picker.getText().toString();
                 String pn=product_name.getText().toString();
                 String pr=price.getText().toString();
@@ -193,12 +162,12 @@ public class Product_Form_Fragment extends Fragment {
                 String rp_name=reporter.getText().toString();
                 boolean pc=cbPurchased.isChecked();
 
-                if(prop_type.isEmpty() || bedroom.isEmpty() || add_date.isEmpty()|| pn.isEmpty() || pr.isEmpty() || fur_type.isEmpty() || rem.isEmpty())
+                if(prop_type.isEmpty() || add_date.isEmpty()|| pn.isEmpty() || pr.isEmpty() || fur_type.isEmpty() || rem.isEmpty())
                 {
                     Toast.makeText(Product_Form_Fragment.this.getActivity(), "Enter all data", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                        dbContext.addProductList(prop_type,bedroom,add_date,pn,pr,fur_type,rem,rp_name,pc);
+                        dbContext.addProductList(prop_type,add_date,pn,pr,fur_type,rem,rp_name,pc);
                       //  Toast.makeText(Property_Form_Fragment.this.getActivity(), "New property added successfully", Toast.LENGTH_SHORT).show();
                     FragmentManager fragmentManager= getActivity().getSupportFragmentManager();
                     fragmentManager.popBackStack();
@@ -206,7 +175,6 @@ public class Product_Form_Fragment extends Fragment {
             }
             if(current_mode=="detail_mode"){
                 String prop_type=property_type_spinner.getSelectedItem().toString();
-                String bedroom=bedrooms_spinner.getSelectedItem().toString();
                 String add_date=date_time_picker.getText().toString();
                 String pn=product_name.getText().toString();
                 String pr=price.getText().toString();
@@ -214,7 +182,7 @@ public class Product_Form_Fragment extends Fragment {
                 String rem=remark.getText().toString();
                 String rp_name=reporter.getText().toString();
                 boolean pc=cbPurchased.isChecked();
-                dbContext.updateProductList(reference_no,Integer.parseInt(reference_no) ,prop_type,bedroom,add_date,pn,pr,fur_type,rem,rp_name,pc);
+                dbContext.updateProductList(reference_no,Integer.parseInt(reference_no) ,prop_type,add_date,pn,pr,fur_type,rem,rp_name,pc);
                 FragmentManager fragmentManager= getActivity().getSupportFragmentManager();
                 fragmentManager.popBackStack();
             }

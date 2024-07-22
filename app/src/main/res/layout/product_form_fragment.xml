@@ -68,19 +68,6 @@
                 android:text="Purchased status" />
 
         </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_gravity="center_horizontal"
-            android:padding="10dp">
-            <Spinner
-                android:id="@+id/bedroom"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/custom_spinner_bg"
-                android:spinnerMode="dropdown" />
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
