@@ -40,6 +40,7 @@ public class Property_Form_Fragment extends Fragment {
     Spinner bedrooms_spinner;
     EditText date_time_picker;
     EditText ref_no;
+    EditText product_name;
     EditText price;
     EditText remark;
     EditText reporter;
@@ -81,6 +82,7 @@ public class Property_Form_Fragment extends Fragment {
         dbContext=new DBContext(Property_Form_Fragment.this.getActivity());
         ref_no_layout=form_view.findViewById(R.id.reference_no_layout);
         ref_no=form_view.findViewById(R.id.reference_no);
+        product_name = form_view.findViewById(R.id.product_name);
         price=form_view.findViewById(R.id.price);
         remark=form_view.findViewById(R.id.remark);
         reporter=form_view.findViewById(R.id.reporter_name);
@@ -98,7 +100,7 @@ public class Property_Form_Fragment extends Fragment {
         if(current_mode=="detail_mode"){
 
            reference_no=bundle.getString("ref_no");
-            ref_no.setText("Reference_No:"+reference_no);
+            ref_no.setText("Item number:"+reference_no);
             ref_no.setEnabled(false);
             property_list=dbContext.readProperty_by_ref_no(reference_no);
             PropertyModel p=property_list.get(0);
@@ -108,6 +110,7 @@ public class Property_Form_Fragment extends Fragment {
             property_type_spinner.setSelection(property_type_adapter.getPosition(prop_type));
             bedrooms_spinner.setSelection(bedroom_adapter.getPosition(bed_type));
             date_time_picker.setText(property_list.get(0).getDate());
+            product_name.setText(property_list.get(0).getProductName());
             price.setText(property_list.get(0).getPrice());
             furniture_type_spinner.setSelection(furniture_type_adapter.getPosition(fur_type));
             remark.setText(property_list.get(0).getRemark());
@@ -186,20 +189,22 @@ public class Property_Form_Fragment extends Fragment {
             @Override
             public void onClick(View view) {
             if(current_mode=="add_mode"){
+                //should add trim later
                 String prop_type=property_type_spinner.getSelectedItem().toString();
                 String bedroom=bedrooms_spinner.getSelectedItem().toString();
                 String add_date=date_time_picker.getText().toString();
+                String pn=product_name.getText().toString();
                 String pr=price.getText().toString();
                 String fur_type=furniture_type_spinner.getSelectedItem().toString();
                 String rem=remark.getText().toString();
                 String rp_name=reporter.getText().toString();
 
-                if(prop_type.isEmpty() || bedroom.isEmpty() || add_date.isEmpty() || pr.isEmpty() || fur_type.isEmpty() || rem.isEmpty())
+                if(prop_type.isEmpty() || bedroom.isEmpty() || add_date.isEmpty()|| pn.isEmpty() || pr.isEmpty() || fur_type.isEmpty() || rem.isEmpty())
                 {
                     Toast.makeText(Property_Form_Fragment.this.getActivity(), "Enter all data", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                        dbContext.addProperty(prop_type,bedroom,add_date,pr,fur_type,rem,rp_name);
+                        dbContext.addProperty(prop_type,bedroom,add_date,pn,pr,fur_type,rem,rp_name);
                       //  Toast.makeText(Property_Form_Fragment.this.getActivity(), "New property added successfully", Toast.LENGTH_SHORT).show();
                     FragmentManager fragmentManager= getActivity().getSupportFragmentManager();
                     fragmentManager.popBackStack();
@@ -209,11 +214,12 @@ public class Property_Form_Fragment extends Fragment {
                 String prop_type=property_type_spinner.getSelectedItem().toString();
                 String bedroom=bedrooms_spinner.getSelectedItem().toString();
                 String add_date=date_time_picker.getText().toString();
+                String pn=product_name.getText().toString();
                 String pr=price.getText().toString();
                 String fur_type=furniture_type_spinner.getSelectedItem().toString();
                 String rem=remark.getText().toString();
                 String rp_name=reporter.getText().toString();
-                dbContext.updateProperty(reference_no,Integer.parseInt(reference_no) ,prop_type,bedroom,add_date,pr,fur_type,rem,rp_name);
+                dbContext.updateProperty(reference_no,Integer.parseInt(reference_no) ,prop_type,bedroom,add_date,pn,pr,fur_type,rem,rp_name);
                 FragmentManager fragmentManager= getActivity().getSupportFragmentManager();
                 fragmentManager.popBackStack();
             }

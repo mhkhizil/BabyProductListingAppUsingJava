@@ -6,7 +6,7 @@ public class PropertyModel {
     private String date;
     private int ref_no;
     private String furniture;
-    private String product_name; //p mha takhr htl htl ml
+    private String product_name;
     private String price;
     private String remark;
     private String user_name;
@@ -44,6 +44,14 @@ public class PropertyModel {
         this.date = date;
     }
 
+    public String getProductName() {
+        return product_name;
+    }
+
+    public void setProductName(String product_name) {
+        this.product_name = product_name;
+    }
+
     public String getPrice()
     {
         return price;
@@ -79,13 +87,14 @@ public class PropertyModel {
     // constructor
     public PropertyModel(int ref_no,String type,
                          String rooms,
-                         String date,
+                         String date,String product_name,
                          String price, String furniture, String remark, String user_name)
     {
         this.ref_no=ref_no;
         this.type = type;
         this.rooms = rooms;
         this.date = date;
+        this.product_name = product_name;
         this.price = price;
         this.furniture = furniture;
         this.remark = remark;
