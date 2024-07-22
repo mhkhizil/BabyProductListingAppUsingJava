@@ -219,7 +219,7 @@
             <com.google.android.material.button.MaterialButton
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                app:backgroundTint="#1183f0"
+                app:backgroundTint="@color/bluish_green"
                 android:id="@+id/save_btn"
                 android:text="Save"
                 android:layout_marginTop="30px"

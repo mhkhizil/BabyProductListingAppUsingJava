@@ -30,7 +30,7 @@
 
             <EditText
                 android:id="@+id/property_search"
-                android:layout_width="258dp"
+                android:layout_width="248dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/custom_edit_text"
@@ -40,10 +40,11 @@
                 android:padding="8dp"
                 android:textColor="@color/black"
                 android:textColorHighlight="@color/cardview_dark_background" />
+
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/add_new_property"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/add_new_property"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 app:icon="@drawable/custom_add_icon"
