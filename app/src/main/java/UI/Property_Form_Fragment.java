@@ -45,6 +45,7 @@ public class Property_Form_Fragment extends Fragment {
     EditText reporter;
     Button save_btn;
     Button delete_btn;
+    Button cancel_btn;
     public String current_mode;
     public String current_username;
     DBContext dbContext;
@@ -86,11 +87,11 @@ public class Property_Form_Fragment extends Fragment {
         date_time_picker=form_view.findViewById(R.id.date);
         save_btn=form_view.findViewById(R.id.save_btn);
         delete_btn=form_view.findViewById(R.id.delete_btn);
-
+        cancel_btn = form_view.findViewById(R.id.cancel_btn);
         if(current_mode=="add_mode"){
             ref_no_layout.setVisibility(View.INVISIBLE);
             save_btn.setText("Add");
-            save_btn.setWidth(500);
+            save_btn.setWidth(300);
             delete_btn.setVisibility(View.GONE);
 
         }
@@ -225,6 +226,13 @@ public class Property_Form_Fragment extends Fragment {
             dbContext.deleteProperty(reference_no);
             FragmentManager fragmentManager= getActivity().getSupportFragmentManager();
             fragmentManager.popBackStack();
+            }
+        });
+        cancel_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                fragmentManager.popBackStack();
             }
         });
 

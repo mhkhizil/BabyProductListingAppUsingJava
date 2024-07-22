@@ -44,7 +44,7 @@
                 android:hint="Reference No"
                 android:id="@+id/reference_no"
                 android:textAlignment="center"
-                android:background="@drawable/form_textbox"
+                android:background="@color/bluish_green"
                 android:drawablePadding="8dp"
 
                 android:padding="8dp"
@@ -232,6 +232,14 @@
                 android:text="Delete"
                 android:layout_marginTop="30px"
                 android:layout_marginHorizontal="20px"/>
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:backgroundTint="@color/black"
+                android:id="@+id/cancel_btn"
+                android:text="Cancel"
+                android:layout_marginTop="30px"
+                android:layout_marginStart="130px"/>
         </LinearLayout>
 
 

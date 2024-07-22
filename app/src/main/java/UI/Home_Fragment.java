@@ -33,10 +33,10 @@ public class Home_Fragment extends Fragment {
                 bundle.putString("mode", "add_mode");
                 bundle.putString("username", "your_username");
 
-                Property_Form_Fragment p_form_fragment = new Property_Form_Fragment();
-                p_form_fragment.setArguments(bundle);
+                Property_Fragment p_fragment = new Property_Fragment();
+                p_fragment.setArguments(bundle);
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, p_form_fragment);
+                transaction.replace(R.id.fragment_container, p_fragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
                 if (getActivity() instanceof FragmentActivity) {
