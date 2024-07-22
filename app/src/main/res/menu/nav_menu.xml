@@ -10,14 +10,14 @@
         >
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/baseline_home_24"
+            android:icon="@drawable/home3"
             android:title="Home"
             />
 
         <item
             android:id="@+id/nav_property"
-            android:icon="@drawable/baseline_category_24"
-            android:title="Property"/>
+            android:icon="@drawable/custom_list_icon"
+            android:title="Baby items"/>
     </group>
 
     <item
@@ -25,7 +25,7 @@
         <menu>
             <item
                 android:id="@+id/nav_logout"
-                android:icon="@drawable/baseline_logout_24"
+                android:icon="@drawable/custom_logout_icon"
                 android:title="Logout"/>
         </menu>
     </item>
