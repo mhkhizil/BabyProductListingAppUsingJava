@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
 
-    tools:context="UI.Property_Fragment">
+    tools:context="UI.Product_Fragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,7 +29,7 @@
                 android:src="@drawable/back_icon2" />
 
             <EditText
-                android:id="@+id/property_search"
+                android:id="@+id/product_search"
                 android:layout_width="248dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
@@ -42,7 +42,7 @@
                 android:textColorHighlight="@color/cardview_dark_background" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/add_new_property"
+                android:id="@+id/add_new_product"
                 android:layout_width="69dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -59,7 +59,7 @@
 
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/property_recyclerView"
+            android:id="@+id/product_recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical"

@@ -2,7 +2,6 @@ package UI;
 
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 
@@ -33,7 +32,7 @@ public class Home_Fragment extends Fragment {
                 bundle.putString("mode", "add_mode");//have to deleted this line delete
                 bundle.putString("username", "your_username");//have to delete this lineto delete
 
-                Property_Fragment p_fragment = new Property_Fragment();
+                Product_Fragment p_fragment = new Product_Fragment();
                 p_fragment.setArguments(bundle);
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, p_fragment);

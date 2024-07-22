@@ -13,7 +13,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.assignment.LoginActivity;
 import com.example.assignment.R;
-import com.example.assignment.SignupActivity;
 import com.google.android.material.navigation.NavigationView;
 
 import android.view.Gravity;
@@ -65,7 +64,7 @@ public class dashboardActivity extends AppCompatActivity implements NavigationVi
              break;
          case R.id.nav_property:
              //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Property_Fragment()).commit();
-             Property_Fragment pfragment=new Property_Fragment();
+             Product_Fragment pfragment=new Product_Fragment();
              Bundle args = new Bundle();
              args.putString("username", username);
              args.putString("password", password);

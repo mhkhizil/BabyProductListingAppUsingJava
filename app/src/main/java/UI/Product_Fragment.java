@@ -33,10 +33,10 @@ import java.util.List;
 import DB_Context.DBContext;
 import DB_Context.ProductListModel;
 
-public class Property_Fragment extends Fragment implements PropertyClickListener {
+public class Product_Fragment extends Fragment implements PropertyClickListener {
 
     RecyclerView recyclerView;
-    PropertyAdapter adapter;
+    ProductAdapter adapter;
     Button add_btn;
     List<ProductListModel> property_list;
     DBContext dbContext;
@@ -49,7 +49,7 @@ public class Property_Fragment extends Fragment implements PropertyClickListener
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View property_view=inflater.inflate(R.layout.fragment_property, container, false);
+        View property_view=inflater.inflate(R.layout.fragment_product, container, false);
         Bundle bundle=getArguments();
 
         if(bundle!=null)
@@ -58,16 +58,16 @@ public class Property_Fragment extends Fragment implements PropertyClickListener
              password=bundle.getString("password");
         }
 
-        recyclerView=property_view.findViewById(R.id.property_recyclerView);
-        add_btn=property_view.findViewById(R.id.add_new_property);
+        recyclerView=property_view.findViewById(R.id.product_recyclerView);
+        add_btn=property_view.findViewById(R.id.add_new_product);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 1);
         recyclerView.setLayoutManager(gridLayoutManager);
 
-        search_text=property_view.findViewById(R.id.property_search);
-        dbContext=new DBContext(Property_Fragment.this.getActivity());
+        search_text=property_view.findViewById(R.id.product_search);
+        dbContext=new DBContext(Product_Fragment.this.getActivity());
         property_list = new ArrayList<>();
         property_list=dbContext.readProductList();
-        adapter=new PropertyAdapter(getContext(),property_list,this);
+        adapter=new ProductAdapter(getContext(),property_list,this);
         recyclerView.setAdapter(adapter);
 
        // FragmentManager fragmentManager=getSupportFragmentManager();
@@ -91,7 +91,7 @@ public class Property_Fragment extends Fragment implements PropertyClickListener
                 // You can get the text using the `s` parameter.
                 String newText = s.toString();
                 property_list= dbContext.searchProductByRefNo(newText);
-                adapter=new PropertyAdapter(getContext(),property_list,Property_Fragment.this);
+                adapter=new ProductAdapter(getContext(),property_list, Product_Fragment.this);
                 recyclerView.setAdapter(adapter);
             }
 

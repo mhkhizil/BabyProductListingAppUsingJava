@@ -21,7 +21,7 @@
         >
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/property_Image"
+            android:id="@+id/product_Image"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginStart="10dp"
@@ -38,7 +38,7 @@
             android:layout_centerInParent="true"
             android:layout_marginStart="41dp"
             android:layout_marginTop="20dp"
-            android:layout_toEndOf="@id/property_Image"
+            android:layout_toEndOf="@id/product_Image"
             android:text="Title"
             android:textColor="@color/bluish_green"
             android:textSize="20sp" />

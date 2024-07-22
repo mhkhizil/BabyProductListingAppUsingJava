@@ -16,12 +16,12 @@ import java.util.List;
 
 import DB_Context.ProductListModel;
 
-public class PropertyAdapter extends RecyclerView.Adapter<MyViewHolder> {
+public class ProductAdapter extends RecyclerView.Adapter<MyViewHolder> {
     private Context context;
     private List<ProductListModel> dataList;
     private PropertyClickListener propertyClickListener;
 
-    public PropertyAdapter(Context context, List<ProductListModel> dataList, PropertyClickListener propertyClickListener) {
+    public ProductAdapter(Context context, List<ProductListModel> dataList, PropertyClickListener propertyClickListener) {
         this.context = context;
         this.dataList = dataList;
         this.propertyClickListener=propertyClickListener;
@@ -30,7 +30,7 @@ public class PropertyAdapter extends RecyclerView.Adapter<MyViewHolder> {
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.property_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_list__item, parent, false);
         return new MyViewHolder(view,propertyClickListener);
     }
 

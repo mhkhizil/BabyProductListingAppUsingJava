@@ -56,7 +56,7 @@ public class Product_Form_Fragment extends Fragment {
 
         }
 
-        View form_view=inflater.inflate(R.layout.property_form_fragment, container, false);
+        View form_view=inflater.inflate(R.layout.product_form_fragment, container, false);
         String[] bedroom_items = {"Select bedroom type", "Studio","One","Two"};
         String[] furniture_type_items = {"Select furniture type", "Furnished","Unfurnished","Part Furnished"};
         String[] property_type_items = {"Select property type", "Flat","House","Bungalow"};
