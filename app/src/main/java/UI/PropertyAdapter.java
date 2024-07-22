@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,14 +14,14 @@ import com.example.assignment.R;
 
 import java.util.List;
 
-import DB_Context.PropertyModel;
+import DB_Context.ProductListModel;
 
 public class PropertyAdapter extends RecyclerView.Adapter<MyViewHolder> {
     private Context context;
-    private List<PropertyModel> dataList;
+    private List<ProductListModel> dataList;
     private PropertyClickListener propertyClickListener;
 
-    public PropertyAdapter(Context context, List<PropertyModel> dataList,PropertyClickListener propertyClickListener) {
+    public PropertyAdapter(Context context, List<ProductListModel> dataList, PropertyClickListener propertyClickListener) {
         this.context = context;
         this.dataList = dataList;
         this.propertyClickListener=propertyClickListener;

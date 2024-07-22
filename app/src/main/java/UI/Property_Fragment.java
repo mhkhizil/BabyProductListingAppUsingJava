@@ -21,7 +21,6 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -32,14 +31,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import DB_Context.DBContext;
-import DB_Context.PropertyModel;
+import DB_Context.ProductListModel;
 
 public class Property_Fragment extends Fragment implements PropertyClickListener {
 
     RecyclerView recyclerView;
     PropertyAdapter adapter;
     Button add_btn;
-    List<PropertyModel> property_list;
+    List<ProductListModel> property_list;
     DBContext dbContext;
     String username="";
     String password="";
@@ -108,7 +107,7 @@ public class Property_Fragment extends Fragment implements PropertyClickListener
                 Bundle bundle = new Bundle();
                 bundle.putString("mode", "add_mode");
                 bundle.putString("username",username);
-                Property_Form_Fragment p_form_fragment = new Property_Form_Fragment();
+                Product_Form_Fragment p_form_fragment = new Product_Form_Fragment();
                 p_form_fragment.setArguments(bundle);
                 FragmentTransaction transaction= getActivity().getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container,p_form_fragment);
@@ -168,16 +167,16 @@ public class Property_Fragment extends Fragment implements PropertyClickListener
     }
     @Override
     public void onItemClick(int position){
-        PropertyModel current_property=property_list.get(position);
+        ProductListModel current_property=property_list.get(position);
         int ref_no=current_property.getRef_no();
         Bundle args=new Bundle();
         args.putString("ref_no",Integer.toString(ref_no));
         args.putString("mode", "detail_mode");
         args.putString("username",username);
-        Property_Form_Fragment property_form_fragment=new Property_Form_Fragment();
-        property_form_fragment.setArguments(args);
+        Product_Form_Fragment product_form_fragment =new Product_Form_Fragment();
+        product_form_fragment.setArguments(args);
         FragmentTransaction transaction= getActivity().getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container,property_form_fragment);
+        transaction.replace(R.id.fragment_container, product_form_fragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }

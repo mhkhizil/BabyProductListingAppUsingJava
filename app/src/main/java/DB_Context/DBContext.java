@@ -122,16 +122,16 @@ public class DBContext extends SQLiteOpenHelper {
     }
 
     //reading data from property
-    public ArrayList<PropertyModel> readProductList()
+    public ArrayList<ProductListModel> readProductList()
     {
         SQLiteDatabase db=this.getReadableDatabase();
         Cursor cursor=db.rawQuery("SELECT * FROM "+ PRODUCT_LIST_TABLE,null);
-        ArrayList<PropertyModel> property_modelArrayList=new ArrayList<>();
+        ArrayList<ProductListModel> property_modelArrayList=new ArrayList<>();
 
         if(cursor.moveToFirst())
         {
             do{
-                property_modelArrayList.add(new PropertyModel(cursor.getInt(0),cursor.getString(1),
+                property_modelArrayList.add(new ProductListModel(cursor.getInt(0),cursor.getString(1),
                         cursor.getString(2),cursor.getString(3),
                         cursor.getString(4),cursor.getString(5),
                         cursor.getString(6),cursor.getString(7),cursor.getString(8), cursor.getInt(9) == 1));
@@ -142,17 +142,17 @@ public class DBContext extends SQLiteOpenHelper {
         return property_modelArrayList;
     }
 
-    public ArrayList<PropertyModel> readProductByRefNumber(String ref_no){
+    public ArrayList<ProductListModel> readProductByRefNumber(String ref_no){
         SQLiteDatabase db=this.getReadableDatabase();
         String selection = PROPERTY_REF_NO+"=?";
         String[] selectionArgs = { ref_no };
         Cursor cursor = db.query(PRODUCT_LIST_TABLE, null, selection, selectionArgs, null, null, null);
-        ArrayList<PropertyModel> property_modelArrayList=new ArrayList<>();
+        ArrayList<ProductListModel> property_modelArrayList=new ArrayList<>();
 
         if(cursor.moveToFirst())
         {
             do{
-                property_modelArrayList.add(new PropertyModel(cursor.getInt(0),cursor.getString(1),
+                property_modelArrayList.add(new ProductListModel(cursor.getInt(0),cursor.getString(1),
                         cursor.getString(2),cursor.getString(3),
                         cursor.getString(4),cursor.getString(5),
                         cursor.getString(6),cursor.getString(7),cursor.getString(8),cursor.getInt(9) == 1));
@@ -162,17 +162,17 @@ public class DBContext extends SQLiteOpenHelper {
         db.close();
         return property_modelArrayList;
     }
-    public ArrayList<PropertyModel> searchProductByRefNo(String ref_no){
+    public ArrayList<ProductListModel> searchProductByRefNo(String ref_no){
         SQLiteDatabase db=this.getReadableDatabase();
         String selection = PROPERTY_REF_NO+" LIKE ?";
         String[] selectionArgs = { "%" + ref_no + "%" };
         Cursor cursor = db.query(PRODUCT_LIST_TABLE, null, selection, selectionArgs, null, null, null);
-        ArrayList<PropertyModel> property_modelArrayList=new ArrayList<>();
+        ArrayList<ProductListModel> property_modelArrayList=new ArrayList<>();
 
         if(cursor.moveToFirst())
         {
             do{
-                property_modelArrayList.add(new PropertyModel(cursor.getInt(0),cursor.getString(1),
+                property_modelArrayList.add(new ProductListModel(cursor.getInt(0),cursor.getString(1),
                         cursor.getString(2),cursor.getString(3),
                         cursor.getString(4),cursor.getString(5),
                         cursor.getString(6),cursor.getString(7),cursor.getString(8),cursor.getInt(9) == 1));

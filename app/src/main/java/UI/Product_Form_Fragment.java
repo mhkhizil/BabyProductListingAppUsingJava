@@ -21,10 +21,10 @@ import java.util.Calendar;
 import java.util.List;
 
 import DB_Context.DBContext;
-import DB_Context.PropertyModel;
+import DB_Context.ProductListModel;
 
 
-public class Property_Form_Fragment extends Fragment {
+public class Product_Form_Fragment extends Fragment {
     Spinner property_type_spinner;
     Spinner furniture_type_spinner;
     Spinner bedrooms_spinner;
@@ -42,7 +42,7 @@ public class Property_Form_Fragment extends Fragment {
     public String current_username;
     DBContext dbContext;
     View ref_no_layout;
-    List<PropertyModel> property_list;
+    List<ProductListModel> property_list;
     String reference_no;
 
     @Override
@@ -60,9 +60,9 @@ public class Property_Form_Fragment extends Fragment {
         String[] bedroom_items = {"Select bedroom type", "Studio","One","Two"};
         String[] furniture_type_items = {"Select furniture type", "Furnished","Unfurnished","Part Furnished"};
         String[] property_type_items = {"Select property type", "Flat","House","Bungalow"};
-        ArrayAdapter<String> bedroom_adapter=new ArrayAdapter<>(Property_Form_Fragment.this.getActivity(), android.R.layout.simple_spinner_dropdown_item,bedroom_items);
-        ArrayAdapter<String> property_type_adapter=new ArrayAdapter<>(Property_Form_Fragment.this.getActivity(), android.R.layout.simple_spinner_dropdown_item,property_type_items);
-        ArrayAdapter<String> furniture_type_adapter=new ArrayAdapter<>(Property_Form_Fragment.this.getActivity(), android.R.layout.simple_spinner_dropdown_item,furniture_type_items);
+        ArrayAdapter<String> bedroom_adapter=new ArrayAdapter<>(Product_Form_Fragment.this.getActivity(), android.R.layout.simple_spinner_dropdown_item,bedroom_items);
+        ArrayAdapter<String> property_type_adapter=new ArrayAdapter<>(Product_Form_Fragment.this.getActivity(), android.R.layout.simple_spinner_dropdown_item,property_type_items);
+        ArrayAdapter<String> furniture_type_adapter=new ArrayAdapter<>(Product_Form_Fragment.this.getActivity(), android.R.layout.simple_spinner_dropdown_item,furniture_type_items);
         property_type_spinner=form_view.findViewById(R.id.property_type);
         furniture_type_spinner=form_view.findViewById(R.id.furniture_type);
         bedrooms_spinner=form_view.findViewById(R.id.bedroom);
@@ -70,7 +70,7 @@ public class Property_Form_Fragment extends Fragment {
         furniture_type_spinner.setAdapter(furniture_type_adapter);
         bedrooms_spinner.setAdapter(bedroom_adapter);
 
-        dbContext=new DBContext(Property_Form_Fragment.this.getActivity());
+        dbContext=new DBContext(Product_Form_Fragment.this.getActivity());
         ref_no_layout=form_view.findViewById(R.id.reference_no_layout);
         ref_no=form_view.findViewById(R.id.reference_no);
         product_name = form_view.findViewById(R.id.product_name);
@@ -95,7 +95,7 @@ public class Property_Form_Fragment extends Fragment {
             ref_no.setText("Item number:"+reference_no);
             ref_no.setEnabled(false);
             property_list=dbContext.readProductByRefNumber(reference_no);
-            PropertyModel p=property_list.get(0);
+            ProductListModel p=property_list.get(0);
             String prop_type=p.getType().toString();
             String bed_type=p.getRooms();
             String fur_type=p.getFurniture();
@@ -195,7 +195,7 @@ public class Property_Form_Fragment extends Fragment {
 
                 if(prop_type.isEmpty() || bedroom.isEmpty() || add_date.isEmpty()|| pn.isEmpty() || pr.isEmpty() || fur_type.isEmpty() || rem.isEmpty())
                 {
-                    Toast.makeText(Property_Form_Fragment.this.getActivity(), "Enter all data", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Product_Form_Fragment.this.getActivity(), "Enter all data", Toast.LENGTH_SHORT).show();
                 }
                 else {
                         dbContext.addProductList(prop_type,bedroom,add_date,pn,pr,fur_type,rem,rp_name,pc);

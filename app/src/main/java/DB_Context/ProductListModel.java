@@ -1,6 +1,6 @@
 package DB_Context;
 
-public class PropertyModel {
+public class ProductListModel {
     private String type;
     private String rooms;
     private String date;
@@ -93,10 +93,10 @@ public class PropertyModel {
     }
 
     // constructor
-    public PropertyModel(int ref_no,String type,
-                         String rooms,
-                         String date,String product_name,
-                         String price, String furniture, String remark, String user_name,boolean purchased)
+    public ProductListModel(int ref_no, String type,
+                            String rooms,
+                            String date, String product_name,
+                            String price, String furniture, String remark, String user_name, boolean purchased)
     {
         this.ref_no=ref_no;
         this.type = type;
