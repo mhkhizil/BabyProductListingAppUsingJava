@@ -38,8 +38,8 @@ public class ProductAdapter extends RecyclerView.Adapter<MyViewHolder> {
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
         holder.property_title.setText(
-                (dataList.get(position).getProductName().length() > 10)
-                        ? dataList.get(position).getProductName().substring(0, 10) + "..."
+                (dataList.get(position).getProductName().length() > 5)
+                        ? dataList.get(position).getProductName().substring(0, 5) + "..."
                         : dataList.get(position).getProductName()
         );
 

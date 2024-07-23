@@ -25,12 +25,10 @@ import DB_Context.ProductListModel;
 
 
 public class Product_Form_Fragment extends Fragment {
-    EditText date_time_picker;
     EditText ref_no;
     EditText product_name;
     EditText price;
     EditText remark;
-    EditText reporter;
     Button save_btn;
     Button delete_btn;
     Button cancel_btn;
@@ -61,9 +59,7 @@ public class Product_Form_Fragment extends Fragment {
         product_name = form_view.findViewById(R.id.product_name);
         price=form_view.findViewById(R.id.price);
         remark=form_view.findViewById(R.id.remark);
-        reporter=form_view.findViewById(R.id.reporter_name);
         cbPurchased =form_view.findViewById(R.id.cbPurchased );
-        date_time_picker=form_view.findViewById(R.id.date);
         save_btn=form_view.findViewById(R.id.save_btn);
         delete_btn=form_view.findViewById(R.id.delete_btn);
         cancel_btn = form_view.findViewById(R.id.cancel_btn);
@@ -81,89 +77,41 @@ public class Product_Form_Fragment extends Fragment {
             ref_no.setEnabled(false);
             property_list=dbContext.readProductByRefNumber(reference_no);
             ProductListModel p=property_list.get(0);
-            date_time_picker.setText(property_list.get(0).getDate());
             product_name.setText(property_list.get(0).getProductName());
             price.setText(property_list.get(0).getPrice());
             remark.setText(property_list.get(0).getRemark());
             cbPurchased.setChecked(property_list.get(0).isPurchased());
-            reporter.setText(property_list.get(0).getUserName());
         }
 
-        reporter.setText(current_username);
-        final Calendar calendar=Calendar.getInstance();
-
-        date_time_picker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                SingleDateAndTimePickerDialog.Builder builder = new SingleDateAndTimePickerDialog.Builder(Property_Form_Fragment.this.getActivity())
-//                        .setTitle("Select Date and Time")
-//                        .setListener(new SingleDateAndTimePickerDialog.Listener() {
-//                            @Override
-//                            public void onDateSelected(Date date) {
-//                                // Handle the selected date and time
-//                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
-//                                String formattedDateTime = sdf.format(date);
-//                                date_time_picker.setText(formattedDateTime);
-//                            }
-//                        });
-//
-//                SingleDateAndTimePickerDialog dialog = builder.build();
-//                dialog.display();
-//                SingleDateAndTimePickerDialog.Builder builder=new SingleDateAndTimePickerDialog.Builder(Property_Form_Fragment.this.getActivity())
-//                        .displayListener(new SingleDateAndTimePickerDialog.DisplayListener() {
-//                            @Override
-//                            public void onDisplayed(SingleDateAndTimePicker picker) {
-//                                // Retrieve the SingleDateAndTimePicker
-//                            }
-//
-//                            @Override
-//                            public void onClosed(SingleDateAndTimePicker picker) {
-//                                picker.getDate();
-//                            }
-//                        })
-//                        .title("Simple")
-//                        .listener(new SingleDateAndTimePickerDialog.Listener() {
-//                            @Override
-//                            public void onDateSelected(Date date) {
-//                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
-//                                String formattedDateTime = sdf.format(date);
-//                                date_time_picker.setText(formattedDateTime);
-//                            }
-//                        }).display();
-            }
-        });
+//       reporter.setText(current_username);
 
         save_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
             if(current_mode=="add_mode"){
                 //should add trim later
-                String add_date=date_time_picker.getText().toString();
                 String pn=product_name.getText().toString();
                 String pr=price.getText().toString();
                 String rem=remark.getText().toString();
-                String rp_name=reporter.getText().toString();
                 boolean pc=cbPurchased.isChecked();
 
-                if( add_date.isEmpty()|| pn.isEmpty() || pr.isEmpty() || rem.isEmpty())
+                if(  pn.isEmpty() || pr.isEmpty() || rem.isEmpty())
                 {
                     Toast.makeText(Product_Form_Fragment.this.getActivity(), "Enter all data", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                        dbContext.addProductList(add_date,pn,pr,rem,rp_name,pc);
+                        dbContext.addProductList(pn,pr,rem,pc);
                       //  Toast.makeText(Property_Form_Fragment.this.getActivity(), "New property added successfully", Toast.LENGTH_SHORT).show();
                     FragmentManager fragmentManager= getActivity().getSupportFragmentManager();
                     fragmentManager.popBackStack();
                 }
             }
             if(current_mode=="detail_mode"){
-                String add_date=date_time_picker.getText().toString();
                 String pn=product_name.getText().toString();
                 String pr=price.getText().toString();
                 String rem=remark.getText().toString();
-                String rp_name=reporter.getText().toString();
                 boolean pc=cbPurchased.isChecked();
-                dbContext.updateProductList(reference_no,Integer.parseInt(reference_no) ,add_date,pn,pr,rem,rp_name,pc);
+                dbContext.updateProductList(reference_no,Integer.parseInt(reference_no) ,pn,pr,rem,pc);
                 FragmentManager fragmentManager= getActivity().getSupportFragmentManager();
                 fragmentManager.popBackStack();
             }

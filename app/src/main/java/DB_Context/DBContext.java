@@ -25,16 +25,9 @@ public class DBContext extends SQLiteOpenHelper {
     private static String USER_PASSWORD="password";
     //declaring column names for property_table
     private static String PROPERTY_REF_NO="ref_no";
-
-
-    private static String DATE="date";
-
-
-
     private static String PRODUCT_NAME="product_name";
     private static String PRICE= "product_price";
     private static String REMARK="remark";
-    private static String REPORTER_NAME="reporter_name";
     private static String PURCHASED = "purchased";
 
     public DBContext(Context context){
@@ -52,9 +45,7 @@ public class DBContext extends SQLiteOpenHelper {
 
         //creating table for property
         String property_create="CREATE TABLE "+ PRODUCT_LIST_TABLE +"("+
-                PROPERTY_REF_NO+" INTEGER PRIMARY KEY AUTOINCREMENT,"+
-                DATE+" TEXT,"+PRODUCT_NAME+" TEXT,"+PRICE+" TEXT,"+REMARK+" TEXT,"+
-                REPORTER_NAME+" TEXT,"+ PURCHASED + " INTEGER)";
+                PROPERTY_REF_NO+" INTEGER PRIMARY KEY AUTOINCREMENT,"+PRODUCT_NAME+" TEXT,"+PRICE+" TEXT,"+REMARK+" TEXT,"+ PURCHASED + " INTEGER)";
 
         db.execSQL(property_create);
     }
@@ -101,15 +92,13 @@ public class DBContext extends SQLiteOpenHelper {
     }
 
     //adding a new property to property table
-    public void addProductList( String date, String product_name, String product_price, String remark, String reporter,boolean purchased)
+    public void addProductList(  String product_name, String product_price, String remark,boolean purchased)
     {
         SQLiteDatabase database=this.getWritableDatabase();
         ContentValues contentValues=new ContentValues();
-        contentValues.put(DATE,date);
         contentValues.put(PRODUCT_NAME, product_name);
         contentValues.put(PRICE,product_price);
         contentValues.put(REMARK,remark);
-        contentValues.put(REPORTER_NAME,reporter);
         contentValues.put(PURCHASED, purchased ? 1 : 0);
         database.insert(PRODUCT_LIST_TABLE,null,contentValues);
         database.close();
@@ -127,7 +116,7 @@ public class DBContext extends SQLiteOpenHelper {
             do{
                 productModelArrayList.add(new ProductListModel(cursor.getInt(0),cursor.getString(1)
                         ,cursor.getString(2),
-                        cursor.getString(3),cursor.getString(4),cursor.getString(5), cursor.getInt(6) == 1));
+                        cursor.getString(3),cursor.getInt(4) == 1));
 
             }while (cursor.moveToNext());
         }
@@ -147,8 +136,7 @@ public class DBContext extends SQLiteOpenHelper {
             do{
                 productModelArrayList.add(new ProductListModel(cursor.getInt(0),cursor.getString(1),
                         cursor.getString(2),
-                        cursor.getString(3),cursor.getString(4),
-                        cursor.getString(5),cursor.getInt(6) == 1));
+                        cursor.getString(3), cursor.getInt(4) == 1));
 
             }while (cursor.moveToNext());
         }
@@ -167,8 +155,8 @@ public class DBContext extends SQLiteOpenHelper {
             do{
                 productModelArrayList.add(new ProductListModel(cursor.getInt(0),cursor.getString(1),
                         cursor.getString(2),
-                        cursor.getString(3),cursor.getString(4),
-                        cursor.getString(5),cursor.getInt(6) == 1));
+                        cursor.getString(3),
+                     cursor.getInt(4) == 1));
 
             }while (cursor.moveToNext());
         }
@@ -184,17 +172,15 @@ public class DBContext extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void updateProductList(String original_ref_no, int new_ref_no, String date, String product_name, String product_price, String remark, String reporter,boolean purchased)
+    public void updateProductList(String original_ref_no, int new_ref_no, String product_name, String product_price, String remark,boolean purchased)
     {
         SQLiteDatabase db=this.getWritableDatabase();
         ContentValues contentValues=new ContentValues();
 
         contentValues.put(PROPERTY_REF_NO,new_ref_no);
-        contentValues.put(DATE,date);
         contentValues.put(PRODUCT_NAME,product_name);
         contentValues.put(PRICE,product_price);
         contentValues.put(REMARK,remark);
-        contentValues.put(REPORTER_NAME,reporter);
         contentValues.put(PURCHASED, purchased ? 1 : 0);
 
         db.update(PRODUCT_LIST_TABLE,contentValues,"ref_no=?",new String[]{original_ref_no});
