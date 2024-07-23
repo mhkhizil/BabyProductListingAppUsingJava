@@ -20,7 +20,7 @@
 
         >
 
-        <com.google.android.material.imageview.ShapeableImageView
+        <ImageView
             android:id="@+id/product_Image"
             android:layout_width="60dp"
             android:layout_height="60dp"
@@ -28,7 +28,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/baseline_space_dashboard_24"
+
             app:shapeAppearanceOverlay="@style/roundedImageViewRounded" />
 
         <TextView

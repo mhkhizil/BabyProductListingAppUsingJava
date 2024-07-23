@@ -57,6 +57,55 @@
 
 
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:padding="10dp">
+            <!--            <TextView-->
+            <!--                android:layout_width="66dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:text="Price"-->
+            <!--                android:textStyle="bold"-->
+            <!--                android:textSize="20sp"/>-->
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:id="@+id/upload_item_image"
+                android:background="@drawable/form_textbox"
+                android:drawablePadding="8dp"
+                android:padding="8dp"
+                android:layout_marginTop="2dp"
+                />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_toEndOf="@id/upload_item_image"
+                android:layout_centerVertical="true">
+
+            <Button
+                android:id="@+id/upload_image_button"
+                android:layout_width="50dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="6dp"
+                app:icon="@drawable/import_icon" />
+
+                <Button
+                    android:id="@+id/camera_image_button"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginStart="6dp"
+                    app:backgroundTint="@color/mid_green"
+                    app:icon="@drawable/open_camera_icon" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+
 
 
         <LinearLayout
@@ -171,7 +220,7 @@
             <com.google.android.material.button.MaterialButton
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                app:backgroundTint="#de692f"
+                app:backgroundTint="@color/red"
                 android:id="@+id/delete_btn"
                 android:text="Delete"
                 android:layout_marginTop="30px"

@@ -1,9 +1,12 @@
 package UI;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -50,9 +53,24 @@ public class ProductAdapter extends RecyclerView.Adapter<MyViewHolder> {
             holder.purchase_status.setText("Not Purchased");
             holder.purchase_status.setTextColor(context.getResources().getColor(R.color.red));
         }
+        byte[] imageData = dataList.get(position).getImage();
 
-
+        if (imageData != null) {
+            try {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+                holder.upload_item_image.setImageBitmap(bitmap);
+            } catch (Exception e) {
+                // Handle decoding errors here (e.g., set a placeholder image)
+                holder.upload_item_image.setImageResource(R.drawable.placeholder_product);
+            }
+        } else {
+            // Set placeholder if no image is available
+            holder.upload_item_image.setImageResource(R.drawable.placeholder_product);
+        }
     }
+
+
+
 
     @Override
     public int getItemCount() {
@@ -65,6 +83,7 @@ public class ProductAdapter extends RecyclerView.Adapter<MyViewHolder> {
 class MyViewHolder extends RecyclerView.ViewHolder{
     TextView purchase_status;
     TextView property_title;
+    ImageView upload_item_image;
     CardView property_Card;
     public MyViewHolder(@NonNull View itemView,PropertyClickListener propertyClickListener) {
         super(itemView);
@@ -74,6 +93,7 @@ class MyViewHolder extends RecyclerView.ViewHolder{
 //        recLang = itemView.findViewById(R.id.recLang);
         property_title = itemView.findViewById(R.id.property_Title);
         purchase_status=itemView.findViewById(R.id.purchase_status);
+        upload_item_image=itemView.findViewById(R.id.product_Image);
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

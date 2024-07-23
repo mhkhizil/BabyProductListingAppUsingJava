@@ -323,8 +323,8 @@
                           <map>
                             <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="89caba" />
-                            <entry key="outputName" value="back_icon2" />
-                            <entry key="sourceFile" value="C:\Users\msi\Downloads\back-icon2.svg" />
+                            <entry key="outputName" value="open_camera_icon" />
+                            <entry key="sourceFile" value="C:\Users\msi\Downloads\open-camera-icon.svg" />
                           </map>
                         </option>
                       </PersistentState>

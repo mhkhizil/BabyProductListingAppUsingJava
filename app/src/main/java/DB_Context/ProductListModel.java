@@ -6,7 +6,7 @@ public class ProductListModel {
     private String price;
     private String remark;
     private boolean purchased;
-
+    private byte[] image;
     public String getProductName() {
         return product_name;
     }
@@ -46,14 +46,24 @@ public class ProductListModel {
         this.purchased = purchased;
     }
 
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
+
     // constructor
     public ProductListModel(int ref_no, String product_name,
-                            String price, String remark, boolean purchased)
+                            String price, String remark, boolean purchased,byte[] image)
     {
         this.ref_no=ref_no;
         this.product_name = product_name;
         this.price = price;
         this.remark = remark;
         this.purchased = purchased;
+        this.image = image;
     }
 }

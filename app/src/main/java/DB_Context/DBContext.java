@@ -29,6 +29,7 @@ public class DBContext extends SQLiteOpenHelper {
     private static String PRICE= "product_price";
     private static String REMARK="remark";
     private static String PURCHASED = "purchased";
+    private static String IMAGE = "image"; //
 
     public DBContext(Context context){
         super(context,DB_NAME,null,1);
@@ -45,7 +46,7 @@ public class DBContext extends SQLiteOpenHelper {
 
         //creating table for property
         String property_create="CREATE TABLE "+ PRODUCT_LIST_TABLE +"("+
-                PROPERTY_REF_NO+" INTEGER PRIMARY KEY AUTOINCREMENT,"+PRODUCT_NAME+" TEXT,"+PRICE+" TEXT,"+REMARK+" TEXT,"+ PURCHASED + " INTEGER)";
+                PROPERTY_REF_NO+" INTEGER PRIMARY KEY AUTOINCREMENT,"+PRODUCT_NAME+" TEXT,"+PRICE+" TEXT,"+REMARK+" TEXT,"+ PURCHASED + " INTEGER," + IMAGE + " BLOB)";
 
         db.execSQL(property_create);
     }
@@ -92,7 +93,7 @@ public class DBContext extends SQLiteOpenHelper {
     }
 
     //adding a new property to property table
-    public void addProductList(  String product_name, String product_price, String remark,boolean purchased)
+    public void addProductList(  String product_name, String product_price, String remark,boolean purchased,byte[] image)
     {
         SQLiteDatabase database=this.getWritableDatabase();
         ContentValues contentValues=new ContentValues();
@@ -100,6 +101,7 @@ public class DBContext extends SQLiteOpenHelper {
         contentValues.put(PRICE,product_price);
         contentValues.put(REMARK,remark);
         contentValues.put(PURCHASED, purchased ? 1 : 0);
+        contentValues.put(IMAGE, image);
         database.insert(PRODUCT_LIST_TABLE,null,contentValues);
         database.close();
     }
@@ -115,8 +117,7 @@ public class DBContext extends SQLiteOpenHelper {
         {
             do{
                 productModelArrayList.add(new ProductListModel(cursor.getInt(0),cursor.getString(1)
-                        ,cursor.getString(2),
-                        cursor.getString(3),cursor.getInt(4) == 1));
+                        ,cursor.getString(2), cursor.getString(3),cursor.getInt(4) == 1,cursor.getBlob(5)));
 
             }while (cursor.moveToNext());
         }
@@ -136,7 +137,7 @@ public class DBContext extends SQLiteOpenHelper {
             do{
                 productModelArrayList.add(new ProductListModel(cursor.getInt(0),cursor.getString(1),
                         cursor.getString(2),
-                        cursor.getString(3), cursor.getInt(4) == 1));
+                        cursor.getString(3), cursor.getInt(4) == 1,cursor.getBlob(5)));
 
             }while (cursor.moveToNext());
         }
@@ -156,7 +157,7 @@ public class DBContext extends SQLiteOpenHelper {
                 productModelArrayList.add(new ProductListModel(cursor.getInt(0),cursor.getString(1),
                         cursor.getString(2),
                         cursor.getString(3),
-                     cursor.getInt(4) == 1));
+                     cursor.getInt(4) == 1,cursor.getBlob(5)));
 
             }while (cursor.moveToNext());
         }
@@ -172,7 +173,7 @@ public class DBContext extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void updateProductList(String original_ref_no, int new_ref_no, String product_name, String product_price, String remark,boolean purchased)
+    public void updateProductList(String original_ref_no, int new_ref_no, String product_name, String product_price, String remark,boolean purchased,byte[] image)
     {
         SQLiteDatabase db=this.getWritableDatabase();
         ContentValues contentValues=new ContentValues();
@@ -182,7 +183,7 @@ public class DBContext extends SQLiteOpenHelper {
         contentValues.put(PRICE,product_price);
         contentValues.put(REMARK,remark);
         contentValues.put(PURCHASED, purchased ? 1 : 0);
-
+        contentValues.put(IMAGE, image);
         db.update(PRODUCT_LIST_TABLE,contentValues,"ref_no=?",new String[]{original_ref_no});
 
     }

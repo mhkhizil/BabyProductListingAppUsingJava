@@ -1,10 +1,16 @@
 package UI;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +18,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.assignment.R;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 
@@ -29,12 +38,17 @@ public class Product_Form_Fragment extends Fragment {
     EditText product_name;
     EditText price;
     EditText remark;
+    ImageView upload_item_image;
+    Button upload_image_button;
     Button save_btn;
     Button delete_btn;
     Button cancel_btn;
     private CheckBox cbPurchased;
     public String current_mode;
     public String current_username;
+    private static final int PICK_IMAGE = 1;
+    private Uri imageUri;
+    private byte[] imageInBytes;
     DBContext dbContext;
     View ref_no_layout;
     List<ProductListModel> property_list;
@@ -60,9 +74,13 @@ public class Product_Form_Fragment extends Fragment {
         price=form_view.findViewById(R.id.price);
         remark=form_view.findViewById(R.id.remark);
         cbPurchased =form_view.findViewById(R.id.cbPurchased );
+        upload_item_image = form_view.findViewById(R.id.upload_item_image);
+        upload_image_button = form_view.findViewById(R.id.upload_image_button);
         save_btn=form_view.findViewById(R.id.save_btn);
         delete_btn=form_view.findViewById(R.id.delete_btn);
         cancel_btn = form_view.findViewById(R.id.cancel_btn);
+
+        upload_item_image.setImageResource(R.drawable.placeholder_product); // Set your default image resource here
         if(current_mode=="add_mode"){
             ref_no_layout.setVisibility(View.INVISIBLE);
             save_btn.setText("Add");
@@ -81,8 +99,22 @@ public class Product_Form_Fragment extends Fragment {
             price.setText(property_list.get(0).getPrice());
             remark.setText(property_list.get(0).getRemark());
             cbPurchased.setChecked(property_list.get(0).isPurchased());
-        }
 
+            if (property_list.get(0).getImage() != null) {
+                imageInBytes=property_list.get(0).getImage();
+                Bitmap bitmap = BitmapFactory.decodeByteArray(imageInBytes, 0, imageInBytes.length);
+                upload_item_image.setImageBitmap(bitmap);
+            }
+
+            //edit mhr pyn pya dl logc yay yan image ko
+        }
+        upload_image_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, PICK_IMAGE);
+            }
+        });
 //       reporter.setText(current_username);
 
         save_btn.setOnClickListener(new View.OnClickListener() {
@@ -100,7 +132,7 @@ public class Product_Form_Fragment extends Fragment {
                     Toast.makeText(Product_Form_Fragment.this.getActivity(), "Enter all data", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                        dbContext.addProductList(pn,pr,rem,pc);
+                        dbContext.addProductList(pn,pr,rem,pc,imageInBytes);
                       //  Toast.makeText(Property_Form_Fragment.this.getActivity(), "New property added successfully", Toast.LENGTH_SHORT).show();
                     FragmentManager fragmentManager= getActivity().getSupportFragmentManager();
                     fragmentManager.popBackStack();
@@ -111,7 +143,7 @@ public class Product_Form_Fragment extends Fragment {
                 String pr=price.getText().toString();
                 String rem=remark.getText().toString();
                 boolean pc=cbPurchased.isChecked();
-                dbContext.updateProductList(reference_no,Integer.parseInt(reference_no) ,pn,pr,rem,pc);
+                dbContext.updateProductList(reference_no,Integer.parseInt(reference_no) ,pn,pr,rem,pc, imageInBytes);
                 FragmentManager fragmentManager= getActivity().getSupportFragmentManager();
                 fragmentManager.popBackStack();
             }
@@ -135,5 +167,22 @@ public class Product_Form_Fragment extends Fragment {
         });
 
         return form_view;
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE && resultCode ==  Activity.RESULT_OK && data != null && data.getData() != null) {
+            imageUri = data.getData();
+            upload_item_image.setImageURI(imageUri);
+
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageUri);
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                imageInBytes = stream.toByteArray();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
