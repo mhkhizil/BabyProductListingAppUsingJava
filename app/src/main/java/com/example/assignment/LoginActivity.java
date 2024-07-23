@@ -24,7 +24,7 @@ private Button login_btn;
 TextView sign_up_text;
     DBContext dbcontext=new DBContext(this);
     ArrayList<UserModel> userModelArrayList=new ArrayList<>();
-
+//
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

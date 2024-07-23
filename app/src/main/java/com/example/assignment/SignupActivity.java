@@ -22,7 +22,7 @@ public class SignupActivity extends AppCompatActivity {
     EditText password;
     EditText confirm_password;
     Button signupbtn;
-
+//
     DBContext dbcontext=new DBContext(this);
     ArrayList<UserModel> userModelArrayList=new ArrayList<>();
     @Override

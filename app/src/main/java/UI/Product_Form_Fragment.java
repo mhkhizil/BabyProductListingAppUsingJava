@@ -2,11 +2,14 @@ package UI;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -21,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
+import android.Manifest;
 
 import com.example.assignment.R;
 
@@ -40,6 +44,7 @@ public class Product_Form_Fragment extends Fragment {
     EditText remark;
     ImageView upload_item_image;
     Button upload_image_button;
+    Button camera_image_button;
     Button save_btn;
     Button delete_btn;
     Button cancel_btn;
@@ -47,6 +52,8 @@ public class Product_Form_Fragment extends Fragment {
     public String current_mode;
     public String current_username;
     private static final int PICK_IMAGE = 1;
+    private static final int CAMERA_REQUEST_CODE = 2;
+    private static final int CAMERA_PERMISSION_CODE = 100;
     private Uri imageUri;
     private byte[] imageInBytes;
     DBContext dbContext;
@@ -79,6 +86,7 @@ public class Product_Form_Fragment extends Fragment {
         save_btn=form_view.findViewById(R.id.save_btn);
         delete_btn=form_view.findViewById(R.id.delete_btn);
         cancel_btn = form_view.findViewById(R.id.cancel_btn);
+        camera_image_button = form_view.findViewById(R.id.camera_image_button);
 
         upload_item_image.setImageResource(R.drawable.placeholder_product); // Set your default image resource here
         if(current_mode=="add_mode"){
@@ -106,13 +114,22 @@ public class Product_Form_Fragment extends Fragment {
                 upload_item_image.setImageBitmap(bitmap);
             }
 
-            //edit mhr pyn pya dl logc yay yan image ko
         }
         upload_image_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, PICK_IMAGE);
+            }
+        });
+        camera_image_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
+                } else {
+                    openCamera();
+                }
             }
         });
 //       reporter.setText(current_username);
@@ -168,6 +185,10 @@ public class Product_Form_Fragment extends Fragment {
 
         return form_view;
     }
+    private void openCamera() {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
+    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -183,6 +204,13 @@ public class Product_Form_Fragment extends Fragment {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }else if (requestCode == CAMERA_REQUEST_CODE && data != null) {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            upload_item_image.setImageBitmap(photo);
+
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            imageInBytes = stream.toByteArray();
         }
     }
 }
