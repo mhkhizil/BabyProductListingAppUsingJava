@@ -25,8 +25,6 @@ import DB_Context.ProductListModel;
 
 
 public class Product_Form_Fragment extends Fragment {
-    Spinner property_type_spinner;
-    Spinner furniture_type_spinner;
     EditText date_time_picker;
     EditText ref_no;
     EditText product_name;
@@ -56,15 +54,6 @@ public class Product_Form_Fragment extends Fragment {
         }
 
         View form_view=inflater.inflate(R.layout.product_form_fragment, container, false);
-        String[] furniture_type_items = {"Select furniture type", "Furnished","Unfurnished","Part Furnished"};
-        String[] property_type_items = {"Select property type", "Flat","House","Bungalow"};
-        ArrayAdapter<String> property_type_adapter=new ArrayAdapter<>(Product_Form_Fragment.this.getActivity(), android.R.layout.simple_spinner_dropdown_item,property_type_items);
-        ArrayAdapter<String> furniture_type_adapter=new ArrayAdapter<>(Product_Form_Fragment.this.getActivity(), android.R.layout.simple_spinner_dropdown_item,furniture_type_items);
-        property_type_spinner=form_view.findViewById(R.id.property_type);
-        furniture_type_spinner=form_view.findViewById(R.id.furniture_type);
-        property_type_spinner.setAdapter(property_type_adapter);
-        furniture_type_spinner.setAdapter(furniture_type_adapter);
-
 
         dbContext=new DBContext(Product_Form_Fragment.this.getActivity());
         ref_no_layout=form_view.findViewById(R.id.reference_no_layout);
@@ -92,13 +81,9 @@ public class Product_Form_Fragment extends Fragment {
             ref_no.setEnabled(false);
             property_list=dbContext.readProductByRefNumber(reference_no);
             ProductListModel p=property_list.get(0);
-            String prop_type=p.getType().toString();
-            String fur_type=p.getFurniture();
-            property_type_spinner.setSelection(property_type_adapter.getPosition(prop_type));
             date_time_picker.setText(property_list.get(0).getDate());
             product_name.setText(property_list.get(0).getProductName());
             price.setText(property_list.get(0).getPrice());
-            furniture_type_spinner.setSelection(furniture_type_adapter.getPosition(fur_type));
             remark.setText(property_list.get(0).getRemark());
             cbPurchased.setChecked(property_list.get(0).isPurchased());
             reporter.setText(property_list.get(0).getUserName());
@@ -153,36 +138,32 @@ public class Product_Form_Fragment extends Fragment {
             public void onClick(View view) {
             if(current_mode=="add_mode"){
                 //should add trim later
-                String prop_type=property_type_spinner.getSelectedItem().toString();
                 String add_date=date_time_picker.getText().toString();
                 String pn=product_name.getText().toString();
                 String pr=price.getText().toString();
-                String fur_type=furniture_type_spinner.getSelectedItem().toString();
                 String rem=remark.getText().toString();
                 String rp_name=reporter.getText().toString();
                 boolean pc=cbPurchased.isChecked();
 
-                if(prop_type.isEmpty() || add_date.isEmpty()|| pn.isEmpty() || pr.isEmpty() || fur_type.isEmpty() || rem.isEmpty())
+                if( add_date.isEmpty()|| pn.isEmpty() || pr.isEmpty() || rem.isEmpty())
                 {
                     Toast.makeText(Product_Form_Fragment.this.getActivity(), "Enter all data", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                        dbContext.addProductList(prop_type,add_date,pn,pr,fur_type,rem,rp_name,pc);
+                        dbContext.addProductList(add_date,pn,pr,rem,rp_name,pc);
                       //  Toast.makeText(Property_Form_Fragment.this.getActivity(), "New property added successfully", Toast.LENGTH_SHORT).show();
                     FragmentManager fragmentManager= getActivity().getSupportFragmentManager();
                     fragmentManager.popBackStack();
                 }
             }
             if(current_mode=="detail_mode"){
-                String prop_type=property_type_spinner.getSelectedItem().toString();
                 String add_date=date_time_picker.getText().toString();
                 String pn=product_name.getText().toString();
                 String pr=price.getText().toString();
-                String fur_type=furniture_type_spinner.getSelectedItem().toString();
                 String rem=remark.getText().toString();
                 String rp_name=reporter.getText().toString();
                 boolean pc=cbPurchased.isChecked();
-                dbContext.updateProductList(reference_no,Integer.parseInt(reference_no) ,prop_type,add_date,pn,pr,fur_type,rem,rp_name,pc);
+                dbContext.updateProductList(reference_no,Integer.parseInt(reference_no) ,add_date,pn,pr,rem,rp_name,pc);
                 FragmentManager fragmentManager= getActivity().getSupportFragmentManager();
                 fragmentManager.popBackStack();
             }

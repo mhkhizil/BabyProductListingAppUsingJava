@@ -1,32 +1,20 @@
 package DB_Context;
 
 public class ProductListModel {
-    private String type;
+
 
     private String date;
     private int ref_no;
-    private String furniture;
+
     private String product_name;
     private String price;
     private String remark;
     private String user_name;
     private boolean purchased;
 
-    public String getFurniture() {
-        return furniture;
-    }
 
-    public void setFurniture(String furniture) {
-        this.furniture = furniture;
-    }
 
-    // creating getter and setter methods
-    public String getType() { return type; }
 
-    public void setType(String type)
-    {
-        this.type = type;
-    }
 
     public String getDate() { return date; }
 
@@ -83,16 +71,14 @@ public class ProductListModel {
     }
 
     // constructor
-    public ProductListModel(int ref_no, String type,
+    public ProductListModel(int ref_no,
                             String date, String product_name,
-                            String price, String furniture, String remark, String user_name, boolean purchased)
+                            String price, String remark, String user_name, boolean purchased)
     {
         this.ref_no=ref_no;
-        this.type = type;
         this.date = date;
         this.product_name = product_name;
         this.price = price;
-        this.furniture = furniture;
         this.remark = remark;
         this.user_name = user_name;
         this.purchased = purchased;
