@@ -33,7 +33,7 @@
 
         <TextView
             android:id="@+id/property_Title"
-            android:layout_width="120dp"
+            android:layout_width="80dp"
             android:layout_height="30dp"
             android:layout_centerInParent="true"
             android:layout_marginStart="41dp"
@@ -45,15 +45,25 @@
 
         <TextView
             android:id="@+id/purchase_status"
-            android:layout_width="60dp"
+            android:layout_width="70dp"
             android:layout_height="30dp"
-            android:layout_alignTop="@id/property_Title"
-            android:layout_marginStart="0dp"
-            android:layout_centerVertical="true"
-            android:layout_toEndOf="@id/property_Title"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="20dp"
 
+            android:paddingTop="14dp"
+            android:layout_toEndOf="@id/property_Title"
+            android:scaleType="centerCrop"
             android:textColor="@color/bluish_green"
             android:textSize="10sp" />
+
+        <ImageView
+            android:id="@+id/share_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="10dp"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/purchase_status"
+            android:src="@drawable/share_icon" />
 
 
 

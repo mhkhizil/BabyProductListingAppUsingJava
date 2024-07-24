@@ -17,6 +17,7 @@ import com.example.assignment.R;
 
 import java.util.List;
 
+import DB_Context.DBContext;
 import DB_Context.ProductListModel;
 
 public class ProductAdapter extends RecyclerView.Adapter<MyViewHolder> {
@@ -29,7 +30,26 @@ public class ProductAdapter extends RecyclerView.Adapter<MyViewHolder> {
         this.dataList = dataList;
         this.propertyClickListener=propertyClickListener;
     }
+    public void markAsPurchased(int position) {
+        ProductListModel product = dataList.get(position);
+        product.setPurchased(true);
+        notifyItemChanged(position);
+        // Update the database
+        DBContext dbContext = new DBContext(context);
+        dbContext.updateProductList( String.valueOf(product.getRef_no()),product.getRef_no(), product.getProductName(), product.getPrice(), product.getRemark(), true, product.getImage());
+        // Update the list and notify adapter
+        dataList.set(position, product);  // Update the item in the list
 
+    }
+    public void deleteItem(int position) {
+        ProductListModel product = dataList.get(position);
+        // Remove from the database
+        DBContext dbContext = new DBContext(context);
+        dbContext.deleteProductList(String.valueOf(product.getRef_no()));
+        // Remove from the list and notify adapter
+        dataList.remove(position);
+        notifyItemRemoved(position);
+    }
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -85,25 +105,40 @@ class MyViewHolder extends RecyclerView.ViewHolder{
     TextView property_title;
     ImageView upload_item_image;
     CardView property_Card;
+    ImageView share_icon;
     public MyViewHolder(@NonNull View itemView,PropertyClickListener propertyClickListener) {
         super(itemView);
-//        recImage = itemView.findViewById(R.id.recImage);
         property_Card = itemView.findViewById(R.id.property_Card);
-//        recDesc = itemView.findViewById(R.id.recDesc);
-//        recLang = itemView.findViewById(R.id.recLang);
         property_title = itemView.findViewById(R.id.property_Title);
         purchase_status=itemView.findViewById(R.id.purchase_status);
         upload_item_image=itemView.findViewById(R.id.product_Image);
+        share_icon = itemView.findViewById(R.id.share_icon);
+
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(propertyClickListener!= null){
-                    int pos=getAdapterPosition();
-                    if(pos!=RecyclerView.NO_POSITION){
+                if (propertyClickListener != null) {
+                    int pos = getAdapterPosition();
+                    if (pos != RecyclerView.NO_POSITION) {
                         propertyClickListener.onItemClick(pos);
                     }
                 }
             }
+
+
+
         });
+        share_icon.setOnClickListener(view ->
+
+        {
+            int pos = getAdapterPosition();
+            if (pos != RecyclerView.NO_POSITION && propertyClickListener != null) {
+                propertyClickListener.onShareClick(pos); // New method in interface
+            }
+        });
+
+
+
+
     }
 }

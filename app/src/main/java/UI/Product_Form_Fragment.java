@@ -12,7 +12,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -28,6 +30,7 @@ import android.widget.Toast;
 import android.Manifest;
 
 import com.example.assignment.R;
+import com.google.android.material.navigation.NavigationView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -157,8 +160,22 @@ public class Product_Form_Fragment extends Fragment {
                 else {
                         dbContext.addProductList(pn,pr,rem,pc,imageInBytes);
                       //  Toast.makeText(Property_Form_Fragment.this.getActivity(), "New property added successfully", Toast.LENGTH_SHORT).show();
-                    FragmentManager fragmentManager= getActivity().getSupportFragmentManager();
-                    fragmentManager.popBackStack();
+                    Product_Fragment p_fragment = new Product_Fragment();
+                    p_fragment.setArguments(bundle);
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.fragment_container, p_fragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                    if (getActivity() instanceof FragmentActivity) {
+                        FragmentActivity activity = (FragmentActivity) getActivity();
+                        // Check for null savedInstanceState within the FragmentActivity
+
+                        NavigationView navigationView = activity.findViewById(R.id.nav_view);
+                        if (navigationView != null) {
+                            navigationView.setCheckedItem(R.id.nav_property);
+                        }
+
+                    }
                 }
             }
             if(current_mode=="detail_mode"){
@@ -167,8 +184,22 @@ public class Product_Form_Fragment extends Fragment {
                 String rem=remark.getText().toString();
                 boolean pc=cbPurchased.isChecked();
                 dbContext.updateProductList(reference_no,Integer.parseInt(reference_no) ,pn,pr,rem,pc, imageInBytes);
-                FragmentManager fragmentManager= getActivity().getSupportFragmentManager();
-                fragmentManager.popBackStack();
+                Product_Fragment p_fragment = new Product_Fragment();
+                p_fragment.setArguments(bundle);
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, p_fragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+                if (getActivity() instanceof FragmentActivity) {
+                    FragmentActivity activity = (FragmentActivity) getActivity();
+                    // Check for null savedInstanceState within the FragmentActivity
+
+                    NavigationView navigationView = activity.findViewById(R.id.nav_view);
+                    if (navigationView != null) {
+                        navigationView.setCheckedItem(R.id.nav_property);
+                    }
+
+                }
             }
             }
         });
@@ -184,8 +215,23 @@ public class Product_Form_Fragment extends Fragment {
         cancel_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                fragmentManager.popBackStack();
+                Bundle bundle = new Bundle();
+                Product_Fragment p_fragment = new Product_Fragment();
+                p_fragment.setArguments(bundle);
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, p_fragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+                if (getActivity() instanceof FragmentActivity) {
+                    FragmentActivity activity = (FragmentActivity) getActivity();
+                    // Check for null savedInstanceState within the FragmentActivity
+
+                    NavigationView navigationView = activity.findViewById(R.id.nav_view);
+                    if (navigationView != null) {
+                        navigationView.setCheckedItem(R.id.nav_property);
+                    }
+
+                }
             }
         });
 

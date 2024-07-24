@@ -6,13 +6,23 @@ package UI;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+
+import android.provider.MediaStore;
 import android.view.View;
+
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 
@@ -23,6 +33,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.assignment.R;
 import com.google.android.material.navigation.NavigationView;
@@ -77,6 +88,8 @@ public class Product_Fragment extends Fragment implements PropertyClickListener 
 //            PropertyModel p=new PropertyModel(1,"ptype","proom","12-2-2023","122","furn","no remark","name"+i);
 //            property_list.add(p);
 //        }
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback(adapter));
+        itemTouchHelper.attachToRecyclerView(recyclerView);
         adapter.notifyDataSetChanged();
 
         search_text.addTextChangedListener(new TextWatcher() {
@@ -165,6 +178,7 @@ public class Product_Fragment extends Fragment implements PropertyClickListener 
 
         return property_view;
     }
+
     @Override
     public void onItemClick(int position){
         ProductListModel current_property=property_list.get(position);
@@ -179,6 +193,56 @@ public class Product_Fragment extends Fragment implements PropertyClickListener 
         transaction.replace(R.id.fragment_container, product_form_fragment);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+    @Override
+    public void onShareClick(int position) {
+        ProductListModel product = property_list.get(position);
+
+        String message = "Check out this product:\n" +
+                "Name: " + product.getProductName() + "\n" +
+                "Price: " + product.getPrice() + "\n" +
+                "status: " + (product.isPurchased()?"Purchased": "Not Purchased")+ "\n" +
+                "Description: " + product.getRemark();
+
+        Intent sendIntent = new Intent(Intent.ACTION_SEND);
+        sendIntent.setType("image/*");
+        sendIntent.putExtra(Intent.EXTRA_TEXT, message);
+        if (product.getImage() != null) {
+            Bitmap bitmap = BitmapFactory.decodeByteArray(product.getImage(), 0, product.getImage().length);
+
+//            if (bitmap.getByteCount() > 300 * 1024) { // Roughly 300 KB limit
+//                float scaleFactor = (float) Math.sqrt(300 * 1024 / (double) bitmap.getByteCount());
+//                bitmap = Bitmap.createScaledBitmap(bitmap, (int) (bitmap.getWidth() * scaleFactor),
+//                        (int) (bitmap.getHeight() * scaleFactor), true);
+//            }
+
+            // Save the image temporarily
+            try {
+                String path = MediaStore.Images.Media.insertImage(
+                        getContext().getContentResolver(), bitmap, "product_image", null);
+                Uri imageUri = Uri.parse(path);
+                sendIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
+            } catch (Exception e) {
+                // Handle exceptions
+                e.printStackTrace();
+            }
+        }
+
+        // Filter for MMS apps
+        PackageManager pm = getContext().getPackageManager();
+        List<ResolveInfo> activities = pm.queryIntentActivities(sendIntent, 0);
+        for (ResolveInfo info : activities) {
+            if (info.activityInfo.packageName.contains("mms") || info.activityInfo.name.contains("mms")) {
+                sendIntent.setPackage(info.activityInfo.packageName);
+                break; // Found an MMS app
+            }
+        }
+
+        try {
+            startActivity(Intent.createChooser(sendIntent, "Share product via"));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(getContext(), "No MMS app found.", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }
