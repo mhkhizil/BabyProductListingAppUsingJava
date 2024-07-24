@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -37,6 +38,7 @@ public class ProductAdapter extends RecyclerView.Adapter<MyViewHolder> {
         // Update the database
         DBContext dbContext = new DBContext(context);
         dbContext.updateProductList( String.valueOf(product.getRef_no()),product.getRef_no(), product.getProductName(), product.getPrice(), product.getRemark(), true, product.getImage());
+
         // Update the list and notify adapter
         dataList.set(position, product);  // Update the item in the list
 
@@ -46,6 +48,7 @@ public class ProductAdapter extends RecyclerView.Adapter<MyViewHolder> {
         // Remove from the database
         DBContext dbContext = new DBContext(context);
         dbContext.deleteProductList(String.valueOf(product.getRef_no()));
+
         // Remove from the list and notify adapter
         dataList.remove(position);
         notifyItemRemoved(position);

@@ -1,11 +1,14 @@
 package UI;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
@@ -40,7 +43,10 @@ import java.util.List;
 import DB_Context.DBContext;
 import DB_Context.ProductListModel;
 
-
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 public class Product_Form_Fragment extends Fragment {
     EditText ref_no;
     EditText product_name;
@@ -64,11 +70,58 @@ public class Product_Form_Fragment extends Fragment {
     View ref_no_layout;
     List<ProductListModel> property_list;
     String reference_no;
+    private SensorManager sensorManager;
+    private Sensor accelerometer;
+    private float lastX, lastY, lastZ;
+    private long lastUpdate = 0;
+    private static final int SHAKE_THRESHOLD = 800;
+    private static final int DATA_X = SensorManager.DATA_X;
+    private static final int DATA_Y = SensorManager.DATA_Y;
+    private static final int DATA_Z = SensorManager.DATA_Z;
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+// Initialize SensorManager
+        sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+        SensorEventListener sensorEventListener=new SensorEventListener() {
+            @Override
+            public void onSensorChanged(SensorEvent event) {
+                long curTime = System.currentTimeMillis();
+                if ((curTime - lastUpdate) > 100) {
+                    long diffTime = (curTime - lastUpdate);
+                    lastUpdate = curTime;
+
+                    float x = event.values[DATA_X];
+                    float y = event.values[DATA_Y];
+                    float z = event.values[DATA_Z];
+
+                    float speed = Math.abs(x + y + z - lastX - lastY - lastZ) / diffTime * 10000;
+
+                    if (speed > SHAKE_THRESHOLD) {
+                        View focusedView = getActivity().getCurrentFocus();
+                        if (focusedView instanceof EditText) {
+                            ((EditText) focusedView).setText("");
+                        }
+                     // Clear form when a shake is detected
+                    }
+                    lastX = x;
+                    lastY = y;
+                    lastZ = z;
+                }
+            }
+
+            @Override
+            public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+            }
+
+        };
+        sensorManager.registerListener(sensorEventListener, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         Bundle bundle=getArguments();
         if(bundle!=null){
             current_mode =bundle.getString("mode");//check mode 'add_mode or 'edit_mode'
@@ -183,7 +236,37 @@ public class Product_Form_Fragment extends Fragment {
                 String pr=price.getText().toString();
                 String rem=remark.getText().toString();
                 boolean pc=cbPurchased.isChecked();
-                dbContext.updateProductList(reference_no,Integer.parseInt(reference_no) ,pn,pr,rem,pc, imageInBytes);
+                if(  pn.isEmpty() || pr.isEmpty() || rem.isEmpty())
+                {
+                    Toast.makeText(Product_Form_Fragment.this.getActivity(), "Enter all data", Toast.LENGTH_SHORT).show();
+                }else {
+                    dbContext.updateProductList(reference_no, Integer.parseInt(reference_no), pn, pr, rem, pc, imageInBytes);
+                    Product_Fragment p_fragment = new Product_Fragment();
+                    p_fragment.setArguments(bundle);
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.fragment_container, p_fragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                    if (getActivity() instanceof FragmentActivity) {
+                        FragmentActivity activity = (FragmentActivity) getActivity();
+                        // Check for null savedInstanceState within the FragmentActivity
+
+                        NavigationView navigationView = activity.findViewById(R.id.nav_view);
+                        if (navigationView != null) {
+                            navigationView.setCheckedItem(R.id.nav_property);
+                        }
+
+                    }
+                }
+            }
+            }
+        });
+
+        delete_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            dbContext.deleteProductList(reference_no);
+                Toast.makeText(Product_Form_Fragment.this.getActivity(), "Item deleted", Toast.LENGTH_SHORT).show();
                 Product_Fragment p_fragment = new Product_Fragment();
                 p_fragment.setArguments(bundle);
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
@@ -200,16 +283,6 @@ public class Product_Form_Fragment extends Fragment {
                     }
 
                 }
-            }
-            }
-        });
-
-        delete_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            dbContext.deleteProductList(reference_no);
-            FragmentManager fragmentManager= getActivity().getSupportFragmentManager();
-            fragmentManager.popBackStack();
             }
         });
         cancel_btn.setOnClickListener(new View.OnClickListener() {
@@ -237,6 +310,7 @@ public class Product_Form_Fragment extends Fragment {
 
         return form_view;
     }
+
     private void openCamera() {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
@@ -260,6 +334,7 @@ public class Product_Form_Fragment extends Fragment {
                 })
                 .show();
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -284,5 +359,6 @@ public class Product_Form_Fragment extends Fragment {
             imageInBytes = stream.toByteArray();
         }
     }
+
 
 }
