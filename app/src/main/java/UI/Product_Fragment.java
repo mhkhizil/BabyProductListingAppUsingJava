@@ -212,44 +212,45 @@ public class Product_Fragment extends Fragment implements PropertyClickListener 
                 "Description: " + product.getRemark();
 
         Intent sendIntent = new Intent(Intent.ACTION_SEND);
-        sendIntent.setType("image/*");
+        sendIntent.setType("text/plain");
         sendIntent.putExtra(Intent.EXTRA_TEXT, message);
-        if (product.getImage() != null) {
-            Bitmap bitmap = BitmapFactory.decodeByteArray(product.getImage(), 0, product.getImage().length);
-
-//            if (bitmap.getByteCount() > 300 * 1024) { // Roughly 300 KB limit
-//                float scaleFactor = (float) Math.sqrt(300 * 1024 / (double) bitmap.getByteCount());
-//                bitmap = Bitmap.createScaledBitmap(bitmap, (int) (bitmap.getWidth() * scaleFactor),
-//                        (int) (bitmap.getHeight() * scaleFactor), true);
-//            }
-
-            // Save the image temporarily
-            try {
-                String path = MediaStore.Images.Media.insertImage(
-                        getContext().getContentResolver(), bitmap, "product_image", null);
-                Uri imageUri = Uri.parse(path);
-                sendIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
-            } catch (Exception e) {
-                // Handle exceptions
-                e.printStackTrace();
-            }
-        }
-
-        // Filter for MMS apps
-        PackageManager pm = getContext().getPackageManager();
-        List<ResolveInfo> activities = pm.queryIntentActivities(sendIntent, 0);
-        for (ResolveInfo info : activities) {
-            if (info.activityInfo.packageName.contains("mms") || info.activityInfo.name.contains("mms")) {
-                sendIntent.setPackage(info.activityInfo.packageName);
-                break; // Found an MMS app
-            }
-        }
-
         try {
             startActivity(Intent.createChooser(sendIntent, "Share product via"));
         } catch (android.content.ActivityNotFoundException ex) {
             Toast.makeText(getContext(), "No MMS app found.", Toast.LENGTH_SHORT).show();
         }
+//        if (product.getImage() != null) {
+//            Bitmap bitmap = BitmapFactory.decodeByteArray(product.getImage(), 0, product.getImage().length);
+//
+////            if (bitmap.getByteCount() > 300 * 1024) { // Roughly 300 KB limit
+////                float scaleFactor = (float) Math.sqrt(300 * 1024 / (double) bitmap.getByteCount());
+////                bitmap = Bitmap.createScaledBitmap(bitmap, (int) (bitmap.getWidth() * scaleFactor),
+////                        (int) (bitmap.getHeight() * scaleFactor), true);
+////            }
+//
+//            // Save the image temporarily
+//            try {
+//                String path = MediaStore.Images.Media.insertImage(
+//                        getContext().getContentResolver(), bitmap, "product_image", null);
+//                Uri imageUri = Uri.parse(path);
+//                sendIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
+//            } catch (Exception e) {
+//                // Handle exceptions
+//                e.printStackTrace();
+//            }
+//        }
+
+        // Filter for MMS apps
+        //PackageManager pm = getContext().getPackageManager();
+//        List<ResolveInfo> activities = pm.queryIntentActivities(sendIntent, 0);
+//        for (ResolveInfo info : activities) {
+//            if (info.activityInfo.packageName.contains("mms") || info.activityInfo.name.contains("mms")) {
+//                sendIntent.setPackage(info.activityInfo.packageName);
+//                break; // Found an MMS app
+//            }
+//        }
+
+
     }
 
 }
