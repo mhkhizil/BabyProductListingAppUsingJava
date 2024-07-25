@@ -164,10 +164,10 @@ public class DBContext extends SQLiteOpenHelper {
         db.close();
         return productModelArrayList;
     }
-    public ArrayList<ProductListModel> searchProductByRefNo(String ref_no,int user_id){
+    public ArrayList<ProductListModel> searchProductByRefNo(String product_name,int user_id){
         SQLiteDatabase db=this.getReadableDatabase();
-        String selection = PROPERTY_REF_NO + " LIKE ? AND " + PRODUCT_USER_ID + "=?";
-        String[] selectionArgs =  { "%" + ref_no + "%", String.valueOf(user_id) };
+        String selection = PRODUCT_NAME + " LIKE ? AND " + PRODUCT_USER_ID + "=?";
+        String[] selectionArgs = { "%" + product_name + "%", String.valueOf(user_id) };
         Cursor cursor = db.query(PRODUCT_LIST_TABLE, null, selection, selectionArgs, null, null, null);
         ArrayList<ProductListModel> productModelArrayList=new ArrayList<>();
 

@@ -36,14 +36,14 @@
                 android:background="@drawable/custom_edit_text"
                 android:drawableLeft="@drawable/baseline_search_24"
                 android:drawablePadding="8dp"
-                android:hint="Search by ref no"
+                android:hint="Search by product name"
                 android:padding="8dp"
                 android:textColor="@color/black"
                 android:textColorHighlight="@color/cardview_dark_background" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/add_new_product"
-                android:layout_width="69dp"
+                android:layout_width="69dp"s
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
