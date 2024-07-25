@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -20,6 +21,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.provider.MediaStore;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,16 +76,17 @@ public class Product_Form_Fragment extends Fragment {
     private Sensor accelerometer;
     private float lastX, lastY, lastZ;
     private long lastUpdate = 0;
-    private static final int SHAKE_THRESHOLD = 800;
+    private static final int SHAKE_THRESHOLD = 600;
     private static final int DATA_X = SensorManager.DATA_X;
     private static final int DATA_Y = SensorManager.DATA_Y;
     private static final int DATA_Z = SensorManager.DATA_Z;
 
-
+    private GestureDetector gestureDetector;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
 // Initialize SensorManager
         sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -158,7 +161,10 @@ public class Product_Form_Fragment extends Fragment {
            reference_no=bundle.getString("ref_no");
             ref_no.setText("Item number:"+reference_no);
             ref_no.setEnabled(false);
-            property_list=dbContext.readProductByRefNumber(reference_no);
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+            int user_id = sharedPreferences.getInt("user_id", -1); // Default value is -1
+
+            property_list=dbContext.readProductByRefNumber(reference_no,user_id);
             ProductListModel p=property_list.get(0);
             product_name.setText(property_list.get(0).getProductName());
             price.setText(property_list.get(0).getPrice());
@@ -211,7 +217,10 @@ public class Product_Form_Fragment extends Fragment {
                     Toast.makeText(Product_Form_Fragment.this.getActivity(), "Enter all data", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                        dbContext.addProductList(pn,pr,rem,pc,imageInBytes);
+                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+                    int user_id = sharedPreferences.getInt("user_id", -1); // Default value is -1
+
+                    dbContext.addProductList(user_id,pn,pr,rem,pc,imageInBytes);
                       //  Toast.makeText(Property_Form_Fragment.this.getActivity(), "New property added successfully", Toast.LENGTH_SHORT).show();
                     Product_Fragment p_fragment = new Product_Fragment();
                     p_fragment.setArguments(bundle);

@@ -3,6 +3,7 @@ package com.example.assignment;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +25,8 @@ private Button login_btn;
 TextView sign_up_text;
     DBContext dbcontext=new DBContext(this);
     ArrayList<UserModel> userModelArrayList=new ArrayList<>();
+    public static final String MyPREFERENCES = "MyPrefs";
+    public static final String UserIdKey = "user_id";
 //
 
     @Override
@@ -46,6 +49,7 @@ TextView sign_up_text;
 
                 userModelArrayList=dbcontext.readUser();
                 UserModel user;
+                int user_id = -1;
                 int isUser_exist=0;
                 for (int i=0;i< userModelArrayList.size();i++)
                 {
@@ -53,9 +57,15 @@ TextView sign_up_text;
                     if(name.equals(user.getUsername())&&pass.equals(user.getPassword()))
                     {
                         isUser_exist++;
+                        user_id = user.getId();
+                        break;
                     }
                 }
                 if(isUser_exist!=0){
+                    SharedPreferences sharedPreferences = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putInt(UserIdKey, user_id);
+                    editor.apply();
                     Intent intent=new Intent(LoginActivity.this,UI.dashboardActivity.class);
                     intent.putExtra("username",name);
                     intent.putExtra("password",pass);

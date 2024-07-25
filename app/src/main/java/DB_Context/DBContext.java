@@ -30,6 +30,7 @@ public class DBContext extends SQLiteOpenHelper {
     private static String REMARK="remark";
     private static String PURCHASED = "purchased";
     private static String IMAGE = "image"; //
+    private static String PRODUCT_USER_ID = "user_id";
 
     public DBContext(Context context){
         super(context,DB_NAME,null,1);
@@ -46,7 +47,9 @@ public class DBContext extends SQLiteOpenHelper {
 
         //creating table for property
         String property_create="CREATE TABLE "+ PRODUCT_LIST_TABLE +"("+
-                PROPERTY_REF_NO+" INTEGER PRIMARY KEY AUTOINCREMENT,"+PRODUCT_NAME+" TEXT,"+PRICE+" TEXT,"+REMARK+" TEXT,"+ PURCHASED + " INTEGER," + IMAGE + " BLOB)";
+                PROPERTY_REF_NO+" INTEGER PRIMARY KEY AUTOINCREMENT,"+PRODUCT_NAME+" TEXT,"+PRICE+" TEXT,"+REMARK+" TEXT,"+ PURCHASED + " INTEGER," + IMAGE + " BLOB,"+
+                PRODUCT_USER_ID+" INTEGER," +
+                "FOREIGN KEY(" + PRODUCT_USER_ID + ") REFERENCES " + USERS_TABLE + "(" + USER_ID + "))";
 
         db.execSQL(property_create);
     }
@@ -93,10 +96,11 @@ public class DBContext extends SQLiteOpenHelper {
     }
 
     //adding a new property to property table
-    public void addProductList(  String product_name, String product_price, String remark,boolean purchased,byte[] image)
+    public void addProductList( int user_id, String product_name, String product_price, String remark,boolean purchased,byte[] image)
     {
         SQLiteDatabase database=this.getWritableDatabase();
         ContentValues contentValues=new ContentValues();
+        contentValues.put(PRODUCT_USER_ID, user_id);
         contentValues.put(PRODUCT_NAME, product_name);
         contentValues.put(PRICE,product_price);
         contentValues.put(REMARK,remark);
@@ -117,18 +121,34 @@ public class DBContext extends SQLiteOpenHelper {
         {
             do{
                 productModelArrayList.add(new ProductListModel(cursor.getInt(0),cursor.getString(1)
-                        ,cursor.getString(2), cursor.getString(3),cursor.getInt(4) == 1,cursor.getBlob(5)));
+                        ,cursor.getString(2), cursor.getString(3),cursor.getInt(4) == 1,cursor.getBlob(5),cursor.getInt(6)));
 
             }while (cursor.moveToNext());
         }
         db.close();
         return productModelArrayList;
     }
+    //reading data from product table by user ID
+    public ArrayList<ProductListModel> readProductListByUserId(int user_id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + PRODUCT_LIST_TABLE + " WHERE " + PRODUCT_USER_ID + "=?", new String[]{String.valueOf(user_id)});
+        ArrayList<ProductListModel> productModelArrayList = new ArrayList<>();
 
-    public ArrayList<ProductListModel> readProductByRefNumber(String ref_no){
+        if (cursor.moveToFirst()) {
+            do {
+                productModelArrayList.add(new ProductListModel(cursor.getInt(0), cursor.getString(1),
+                        cursor.getString(2), cursor.getString(3), cursor.getInt(4) == 1, cursor.getBlob(5), cursor.getInt(6)));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return productModelArrayList;
+    }
+
+    public ArrayList<ProductListModel> readProductByRefNumber(String ref_no, int user_id){
         SQLiteDatabase db=this.getReadableDatabase();
-        String selection = PROPERTY_REF_NO+"=?";
-        String[] selectionArgs = { ref_no };
+        String selection = PROPERTY_REF_NO + "=? AND " + PRODUCT_USER_ID + "=?";
+        String[] selectionArgs = { ref_no, String.valueOf(user_id) };
         Cursor cursor = db.query(PRODUCT_LIST_TABLE, null, selection, selectionArgs, null, null, null);
         ArrayList<ProductListModel> productModelArrayList=new ArrayList<>();
 
@@ -137,17 +157,17 @@ public class DBContext extends SQLiteOpenHelper {
             do{
                 productModelArrayList.add(new ProductListModel(cursor.getInt(0),cursor.getString(1),
                         cursor.getString(2),
-                        cursor.getString(3), cursor.getInt(4) == 1,cursor.getBlob(5)));
+                        cursor.getString(3), cursor.getInt(4) == 1,cursor.getBlob(5),cursor.getInt(6)));
 
             }while (cursor.moveToNext());
         }
         db.close();
         return productModelArrayList;
     }
-    public ArrayList<ProductListModel> searchProductByRefNo(String ref_no){
+    public ArrayList<ProductListModel> searchProductByRefNo(String ref_no,int user_id){
         SQLiteDatabase db=this.getReadableDatabase();
-        String selection = PROPERTY_REF_NO+" LIKE ?";
-        String[] selectionArgs = { "%" + ref_no + "%" };
+        String selection = PROPERTY_REF_NO + " LIKE ? AND " + PRODUCT_USER_ID + "=?";
+        String[] selectionArgs =  { "%" + ref_no + "%", String.valueOf(user_id) };
         Cursor cursor = db.query(PRODUCT_LIST_TABLE, null, selection, selectionArgs, null, null, null);
         ArrayList<ProductListModel> productModelArrayList=new ArrayList<>();
 
@@ -157,7 +177,7 @@ public class DBContext extends SQLiteOpenHelper {
                 productModelArrayList.add(new ProductListModel(cursor.getInt(0),cursor.getString(1),
                         cursor.getString(2),
                         cursor.getString(3),
-                     cursor.getInt(4) == 1,cursor.getBlob(5)));
+                     cursor.getInt(4) == 1,cursor.getBlob(5),cursor.getInt(6)));
 
             }while (cursor.moveToNext());
         }

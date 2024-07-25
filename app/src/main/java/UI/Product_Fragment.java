@@ -6,7 +6,9 @@ package UI;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
@@ -77,7 +79,10 @@ public class Product_Fragment extends Fragment implements PropertyClickListener 
         search_text=property_view.findViewById(R.id.product_search);
         dbContext=new DBContext(Product_Fragment.this.getActivity());
         property_list = new ArrayList<>();
-        property_list=dbContext.readProductList();
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        int user_id = sharedPreferences.getInt("user_id", -1); // Default value is -1
+
+        property_list=dbContext.readProductListByUserId(user_id);
         adapter=new ProductAdapter(getContext(),property_list,this);
         recyclerView.setAdapter(adapter);
 
@@ -103,7 +108,9 @@ public class Product_Fragment extends Fragment implements PropertyClickListener 
                 // This method is called when the text is changed.
                 // You can get the text using the `s` parameter.
                 String newText = s.toString();
-                property_list= dbContext.searchProductByRefNo(newText);
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+                int user_id = sharedPreferences.getInt("user_id", -1);
+                property_list= dbContext.searchProductByRefNo(newText,user_id);
                 adapter=new ProductAdapter(getContext(),property_list, Product_Fragment.this);
                 recyclerView.setAdapter(adapter);
             }
