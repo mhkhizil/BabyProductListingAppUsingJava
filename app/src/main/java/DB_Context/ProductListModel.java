@@ -1,6 +1,6 @@
 package DB_Context;
-
 public class ProductListModel {
+    // ... (class members and methods)
     private int ref_no;
     private String product_name;
     private String price;
@@ -8,6 +8,7 @@ public class ProductListModel {
     private boolean purchased;
     private byte[] image;
     private int user_id;
+    // ... (getter and setter methods for each member variable)
     public String getProductName() {
         return product_name;
     }

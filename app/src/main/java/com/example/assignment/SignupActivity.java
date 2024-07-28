@@ -1,5 +1,6 @@
-package com.example.assignment;
+package com.example.assignment; // Defines the package this class belongs to.
 
+// Imports necessary classes for UI elements, database interaction, and user data
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -15,55 +16,64 @@ import java.util.ArrayList;
 import DB_Context.DBContext;
 import DB_Context.UserModel;
 
-public class SignupActivity extends AppCompatActivity {
+public class SignupActivity extends AppCompatActivity {// Declares a new activity for user sign-up
 
+    // UI elements
     TextView login_text;
     EditText username;
     EditText password;
     EditText confirm_password;
     Button signupbtn;
-//
+//// Creates a database context instance
     DBContext dbcontext=new DBContext(this);
-    ArrayList<UserModel> userModelArrayList=new ArrayList<>();
+    ArrayList<UserModel> userModelArrayList=new ArrayList<>();// List to store user data
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) { // Main entry point of the activity
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup);
+        setContentView(R.layout.activity_signup); // Sets the layout for the activity
+        // Initialization of UI elements by finding them in the layout
         login_text=findViewById(R.id.logintext);
         username=findViewById(R.id.signup_username);
         password=findViewById(R.id.signup_password);
         confirm_password=findViewById(R.id.signup_confirm_password);
         signupbtn=findViewById(R.id.signup_button);
 
-        login_text.setOnClickListener(new View.OnClickListener() {
+        login_text.setOnClickListener(new View.OnClickListener() {// When login text is clicked
+
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(SignupActivity.this,LoginActivity.class);
-                startActivity(intent);
+                Intent intent=new Intent(SignupActivity.this,LoginActivity.class);//Create an intent to start LoginActivity
+                startActivity(intent); // Start the LoginActivity
+
             }
         });
 
-        signupbtn.setOnClickListener(new View.OnClickListener() {
+        signupbtn.setOnClickListener(new View.OnClickListener() {// When signup button is clicked
             @Override
             public void onClick(View view) {
                 String name=username.getText().toString();
                 String pass=password.getText().toString();
                 String con_pass=confirm_password.getText().toString();
-
-                if(name.isEmpty() || pass.isEmpty() || con_pass.isEmpty())
+//test to fill data
+                if(name.isEmpty() )
                 {
-                    Toast.makeText(SignupActivity.this, "Please fill all the data", Toast.LENGTH_SHORT).show();
-                }
-                else{
+                    Toast.makeText(SignupActivity.this, "Username field is empty  ", Toast.LENGTH_SHORT).show();
+                } else if (pass.isEmpty()) {
+                    Toast.makeText(SignupActivity.this, "Password field is empty  ", Toast.LENGTH_SHORT).show();
+                } else if (con_pass.isEmpty()) {
+                    Toast.makeText(SignupActivity.this, "Confirm Password field is empty  ", Toast.LENGTH_SHORT).show();
+                } else{
+                    //check password with confirm password
                     if(pass.equals(con_pass)){
                         userModelArrayList=dbcontext.readUser();
                         UserModel user;
                         Boolean isUser=false;
+                        //getting user
                         if(userModelArrayList!=null){
                             for (int i=0;i<userModelArrayList.size();i++)
                             {
                                 user=userModelArrayList.get(i);
-
+//checking if user exists in db
                                 if(name.equals(user.getUsername())&& pass.equals(user.getPassword()))
                                 {
                                     isUser=true;
@@ -71,7 +81,7 @@ public class SignupActivity extends AppCompatActivity {
                                 }
                             }
                         }
-
+//if exists error message and if not add user to table
                         if(isUser)
                         {
                             Toast.makeText(getApplicationContext(),"User already exists. Please login to continue",Toast.LENGTH_SHORT).show();

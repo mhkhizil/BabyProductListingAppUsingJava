@@ -13,13 +13,10 @@
     app:cardElevation="8dp"
     android:background="@drawable/custom_edit_text"
     >
-
     <RelativeLayout
         android:layout_width="399dp"
         android:layout_height="wrap_content"
-
         >
-
         <ImageView
             android:id="@+id/product_Image"
             android:layout_width="60dp"
@@ -28,9 +25,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:scaleType="centerCrop"
-
             app:shapeAppearanceOverlay="@style/roundedImageViewRounded" />
-
         <TextView
             android:id="@+id/property_Title"
             android:layout_width="80dp"
@@ -42,20 +37,17 @@
             android:text="Title"
             android:textColor="@color/bluish_green"
             android:textSize="20sp" />
-
         <TextView
             android:id="@+id/purchase_status"
             android:layout_width="70dp"
             android:layout_height="30dp"
             android:layout_marginStart="1dp"
             android:layout_marginTop="20dp"
-
             android:paddingTop="14dp"
             android:layout_toEndOf="@id/property_Title"
             android:scaleType="centerCrop"
             android:textColor="@color/bluish_green"
             android:textSize="10sp" />
-
         <ImageView
             android:id="@+id/share_icon"
             android:layout_width="20dp"
@@ -64,9 +56,5 @@
             android:layout_centerVertical="true"
             android:layout_toEndOf="@id/purchase_status"
             android:src="@drawable/share_icon" />
-
-
-
     </RelativeLayout>
-    
 </androidx.cardview.widget.CardView>

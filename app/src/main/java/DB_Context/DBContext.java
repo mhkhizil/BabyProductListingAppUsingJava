@@ -45,7 +45,7 @@ public class DBContext extends SQLiteOpenHelper {
 
         db.execSQL(user_create);
 
-        //creating table for property
+        //creating table for product
         String property_create="CREATE TABLE "+ PRODUCT_LIST_TABLE +"("+
                 PROPERTY_REF_NO+" INTEGER PRIMARY KEY AUTOINCREMENT,"+PRODUCT_NAME+" TEXT,"+PRICE+" TEXT,"+REMARK+" TEXT,"+ PURCHASED + " INTEGER," + IMAGE + " BLOB,"+
                 PRODUCT_USER_ID+" INTEGER," +
@@ -95,7 +95,7 @@ public class DBContext extends SQLiteOpenHelper {
         return userModelArrayList;
     }
 
-    //adding a new property to property table
+    //adding a new product to product table
     public void addProductList( int user_id, String product_name, String product_price, String remark,boolean purchased,byte[] image)
     {
         SQLiteDatabase database=this.getWritableDatabase();
@@ -110,7 +110,7 @@ public class DBContext extends SQLiteOpenHelper {
         database.close();
     }
 
-    //reading data from property
+    //reading data from product
     public ArrayList<ProductListModel> readProductList()
     {
         SQLiteDatabase db=this.getReadableDatabase();
@@ -144,7 +144,7 @@ public class DBContext extends SQLiteOpenHelper {
         db.close();
         return productModelArrayList;
     }
-
+    //read product by ref no
     public ArrayList<ProductListModel> readProductByRefNumber(String ref_no, int user_id){
         SQLiteDatabase db=this.getReadableDatabase();
         String selection = PROPERTY_REF_NO + "=? AND " + PRODUCT_USER_ID + "=?";
@@ -164,7 +164,8 @@ public class DBContext extends SQLiteOpenHelper {
         db.close();
         return productModelArrayList;
     }
-    public ArrayList<ProductListModel> searchProductByRefNo(String product_name,int user_id){
+    //search product product name
+    public ArrayList<ProductListModel> searchProductByProductName(String product_name, int user_id){
         SQLiteDatabase db=this.getReadableDatabase();
         String selection = PRODUCT_NAME + " LIKE ? AND " + PRODUCT_USER_ID + "=?";
         String[] selectionArgs = { "%" + product_name + "%", String.valueOf(user_id) };
@@ -185,13 +186,14 @@ public class DBContext extends SQLiteOpenHelper {
         return productModelArrayList;
     }
 
-    //delete property form property table
+    //delete property form product table
     public void deleteProductList(String ref_no)
     {
         SQLiteDatabase db=this.getWritableDatabase();
         db.delete(PRODUCT_LIST_TABLE,"ref_no=?",new String[]{ref_no});
         db.close();
     }
+    //update info in product table
 
     public void updateProductList(String original_ref_no, int new_ref_no, String product_name, String product_price, String remark,boolean purchased,byte[] image)
     {
@@ -207,6 +209,7 @@ public class DBContext extends SQLiteOpenHelper {
         db.update(PRODUCT_LIST_TABLE,contentValues,"ref_no=?",new String[]{original_ref_no});
 
     }
+    //get table list
     public List<String> getTableList() {
         List<String> tableList = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();

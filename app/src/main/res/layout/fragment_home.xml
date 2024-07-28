@@ -12,10 +12,10 @@
         android:id="@+id/welcomeTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Welcome to BabyBuy baby product listing app"
+        android:text="Welcome to Baby Buy baby product listing app"
         android:textAlignment="center"
         android:textColor="@color/bluish_green"
-        android:textSize="22dp"
+        android:textSize="20dp"
         android:textStyle="bold" />
 
     <ImageView

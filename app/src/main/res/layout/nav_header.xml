@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:text="Welcome to Baby buy"
+            android:text="Welcome to Baby Buy"
             android:textColor="@color/mid_green"
             android:textSize="25dp"
             android:textStyle="bold"

@@ -1,5 +1,5 @@
-package UI;
-
+package UI;// Declares the package
+//import what necessary
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -49,7 +49,9 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+// Fragment for handling product form interactions (add/edit/detail)
 public class Product_Form_Fragment extends Fragment {
+    // Declare UI elements
     EditText ref_no;
     EditText product_name;
     EditText price;
@@ -61,17 +63,21 @@ public class Product_Form_Fragment extends Fragment {
     Button delete_btn;
     Button cancel_btn;
     private CheckBox cbPurchased;
+    // Variables to store form data and control behavior
     public String current_mode;
     public String current_username;
+    // Constants for image handling and camera permission
     private static final int PICK_IMAGE = 1;
     private static final int CAMERA_REQUEST_CODE = 2;
     private static final int CAMERA_PERMISSION_CODE = 100;
+    // Variables for image data and database interaction
     private Uri imageUri;
     private byte[] imageInBytes;
     DBContext dbContext;
     View ref_no_layout;
     List<ProductListModel> property_list;
     String reference_no;
+    //sensor variable for handling shake
     private SensorManager sensorManager;
     private Sensor accelerometer;
     private float lastX, lastY, lastZ;
@@ -82,17 +88,18 @@ public class Product_Form_Fragment extends Fragment {
     private static final int DATA_Z = SensorManager.DATA_Z;
 
     private GestureDetector gestureDetector;
-
+// Override the onCreateView method to set up the fragment's view
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-// Initialize SensorManager
+// Initialize SensorManager and accelerometer sensor
         sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-
+// SensorEventListener for shake detection
         SensorEventListener sensorEventListener=new SensorEventListener() {
             @Override
+                    //(Shake detection logic: Clears form fields if a shake is detected
             public void onSensorChanged(SensorEvent event) {
                 long curTime = System.currentTimeMillis();
                 if ((curTime - lastUpdate) > 100) {
@@ -124,16 +131,18 @@ public class Product_Form_Fragment extends Fragment {
             }
 
         };
+        // Register the SensorEventListener
         sensorManager.registerListener(sensorEventListener, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        // Get arguments (mode and username) passed to the fragment
         Bundle bundle=getArguments();
         if(bundle!=null){
             current_mode =bundle.getString("mode");//check mode 'add_mode or 'edit_mode'
             current_username= bundle.getString("username");
 
         }
-
+// Inflate the layout for the fragment
         View form_view=inflater.inflate(R.layout.product_form_fragment, container, false);
-
+        // ... (Find and initialize all UI elements from the layout)
         dbContext=new DBContext(Product_Form_Fragment.this.getActivity());
         ref_no_layout=form_view.findViewById(R.id.reference_no_layout);
         ref_no=form_view.findViewById(R.id.reference_no);
@@ -147,8 +156,8 @@ public class Product_Form_Fragment extends Fragment {
         delete_btn=form_view.findViewById(R.id.delete_btn);
         cancel_btn = form_view.findViewById(R.id.cancel_btn);
         camera_image_button = form_view.findViewById(R.id.camera_image_button);
-
-        upload_item_image.setImageResource(R.drawable.placeholder_product); // Set your default image resource here
+// ... (Set up default image, handle UI based on current mode)
+        upload_item_image.setImageResource(R.drawable.placeholder_product);
         if(current_mode=="add_mode"){
             ref_no_layout.setVisibility(View.INVISIBLE);
             save_btn.setText("Add");
@@ -178,6 +187,7 @@ public class Product_Form_Fragment extends Fragment {
             }
 
         }
+        // Set click listeners for the "Upload Image"
         upload_image_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -185,7 +195,7 @@ public class Product_Form_Fragment extends Fragment {
                 startActivityForResult(intent, PICK_IMAGE);
             }
         });
-
+        // Set click listeners for the  "Camera" buttons
         camera_image_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -200,8 +210,7 @@ public class Product_Form_Fragment extends Fragment {
                 }
             }
         });
-//       reporter.setText(current_username);
-
+// Set click listeners for the "Save,"  buttons
         save_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -211,17 +220,17 @@ public class Product_Form_Fragment extends Fragment {
                 String pr=price.getText().toString();
                 String rem=remark.getText().toString();
                 boolean pc=cbPurchased.isChecked();
-
                 if(  pn.isEmpty() || pr.isEmpty() || rem.isEmpty())
                 {
                     Toast.makeText(Product_Form_Fragment.this.getActivity(), "Enter all data", Toast.LENGTH_SHORT).show();
-                }
-                else {
+                } else if (!pr.matches("\\d+")) {
+                    Toast.makeText(Product_Form_Fragment.this.getActivity(), "Price must be numeric", Toast.LENGTH_SHORT).show();
+                } else {
                     SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
                     int user_id = sharedPreferences.getInt("user_id", -1); // Default value is -1
 
                     dbContext.addProductList(user_id,pn,pr,rem,pc,imageInBytes);
-                      //  Toast.makeText(Property_Form_Fragment.this.getActivity(), "New property added successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "New Item added !", Toast.LENGTH_SHORT).show();
                     Product_Fragment p_fragment = new Product_Fragment();
                     p_fragment.setArguments(bundle);
                     FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
@@ -248,8 +257,12 @@ public class Product_Form_Fragment extends Fragment {
                 if(  pn.isEmpty() || pr.isEmpty() || rem.isEmpty())
                 {
                     Toast.makeText(Product_Form_Fragment.this.getActivity(), "Enter all data", Toast.LENGTH_SHORT).show();
-                }else {
+                }else if (!pr.matches("\\d+")) {
+                    Toast.makeText(Product_Form_Fragment.this.getActivity(), "Price must be numeric", Toast.LENGTH_SHORT).show();
+                }
+                else {
                     dbContext.updateProductList(reference_no, Integer.parseInt(reference_no), pn, pr, rem, pc, imageInBytes);
+                    Toast.makeText(getContext(), " Item updated !", Toast.LENGTH_SHORT).show();
                     Product_Fragment p_fragment = new Product_Fragment();
                     p_fragment.setArguments(bundle);
                     FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
@@ -270,7 +283,7 @@ public class Product_Form_Fragment extends Fragment {
             }
             }
         });
-
+// Set click listeners for the  "Delete,"
         delete_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -294,6 +307,7 @@ public class Product_Form_Fragment extends Fragment {
                 }
             }
         });
+        // Set click listeners for the  "Cancel" buttons
         cancel_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -319,11 +333,12 @@ public class Product_Form_Fragment extends Fragment {
 
         return form_view;
     }
-
+//method for opening camera
     private void openCamera() {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
     }
+    //to show permission for user
     private void showPermissionRationale() {
         new AlertDialog.Builder(getActivity())
                 .setTitle("Camera Permission Needed")
@@ -343,7 +358,7 @@ public class Product_Form_Fragment extends Fragment {
                 })
                 .show();
     }
-
+//image processing
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

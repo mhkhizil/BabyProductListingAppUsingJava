@@ -50,20 +50,15 @@
                 app:icon="@drawable/custom_add_icon"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"
-
-
                 />
-
-
         </LinearLayout>
-
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/product_recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical"
             />
+
 
     </LinearLayout>
 

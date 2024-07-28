@@ -1,19 +1,14 @@
-package UI;
+package UI;// Declares the package
 
 
 
-
+// Import necessary Android components and libraries for UI, data storage, and navigation
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,7 +16,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 
-import android.provider.MediaStore;
 import android.view.View;
 
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -45,24 +39,25 @@ import java.util.List;
 
 import DB_Context.DBContext;
 import DB_Context.ProductListModel;
-
+// Fragment for displaying a list of products and handling interactions
 public class Product_Fragment extends Fragment implements PropertyClickListener {
-
+    // Declare UI elements (RecyclerView, Button, EditText) and data structures
     RecyclerView recyclerView;
     ProductAdapter adapter;
     Button add_btn;
-    List<ProductListModel> property_list;
+    List<ProductListModel> product_lists;
     DBContext dbContext;
     String username="";
     String password="";
     EditText search_text;
 
 
-
+    // onCreateView method is called when the fragment's view is created
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View property_view=inflater.inflate(R.layout.fragment_product, container, false);
+        // Get arguments (username and password) passed to the fragment
         Bundle bundle=getArguments();
 
         if(bundle!=null)
@@ -70,33 +65,33 @@ public class Product_Fragment extends Fragment implements PropertyClickListener 
              username=bundle.getString("username");
              password=bundle.getString("password");
         }
-
+        // Find and initialize the RecyclerView, add button, and search text view along with Set up a grid layout manager for the RecyclerView with one column
         recyclerView=property_view.findViewById(R.id.product_recyclerView);
         add_btn=property_view.findViewById(R.id.add_new_product);
+
+
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 1);
         recyclerView.setLayoutManager(gridLayoutManager);
 
         search_text=property_view.findViewById(R.id.product_search);
+        // Initialize database context and retrieve product list for the current user
         dbContext=new DBContext(Product_Fragment.this.getActivity());
-        property_list = new ArrayList<>();
+        product_lists = new ArrayList<>();
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         int user_id = sharedPreferences.getInt("user_id", -1); // Default value is -1
-
-        property_list=dbContext.readProductListByUserId(user_id);
-        adapter=new ProductAdapter(getContext(),property_list,this);
+        // Load products for the current user and set up the adapter
+        product_lists =dbContext.readProductListByUserId(user_id);
+        adapter=new ProductAdapter(getContext(), product_lists,this);
         recyclerView.setAdapter(adapter);
 
        // FragmentManager fragmentManager=getSupportFragmentManager();
 
-//        for(int i=0;i<2;i++)
-//        {
-//            PropertyModel p=new PropertyModel(1,"ptype","proom","12-2-2023","122","furn","no remark","name"+i);
-//            property_list.add(p);
-//        }
+
+        // Add swipe-to-delete functionality to the RecyclerView
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback(adapter));
         itemTouchHelper.attachToRecyclerView(recyclerView);
         adapter.notifyDataSetChanged();
-
+// Add a TextWatcher to the search_text EditText to filter products
         search_text.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -110,8 +105,8 @@ public class Product_Fragment extends Fragment implements PropertyClickListener 
                 String newText = s.toString();
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
                 int user_id = sharedPreferences.getInt("user_id", -1);
-                property_list= dbContext.searchProductByRefNo(newText,user_id);
-                adapter=new ProductAdapter(getContext(),property_list, Product_Fragment.this);
+                product_lists = dbContext.searchProductByProductName(newText,user_id);
+                adapter=new ProductAdapter(getContext(), product_lists, Product_Fragment.this);
                 recyclerView.setAdapter(adapter);
             }
 
@@ -120,7 +115,7 @@ public class Product_Fragment extends Fragment implements PropertyClickListener 
                 // This method is called after the text is changed.
             }
         });
-
+        // Set click listener for the "Add" button
         add_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -135,27 +130,13 @@ public class Product_Fragment extends Fragment implements PropertyClickListener 
                 transaction.commit();
             }
         });
+        // ... (Navigate back to the Home_Fragment and update the navigation drawer)
         ImageView backButton = property_view.findViewById(R.id.back_icon_to_home_page);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Choose one of the following options based on your HomeScreen structure:
 
-                // Option 1: HomeScreen is a Fragment
-//               getActivity().getSupportFragmentManager().popBackStack();
-
-                //Option 2: HomeScreen is an Activity
-//                 Intent intent = new Intent(getActivity(), Home_Fragment.class);
-//                startActivity(intent);
-//                 getActivity().finish();
-                // Option 1: Home Screen is a Fragment
-//                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-//                Home_Fragment homeFragment = (Home_Fragment) fragmentManager.findFragmentByTag("HomeFragmentTag"); // Replace with your tag
-//                if (homeFragment != null) {
-//                    fragmentManager.beginTransaction()
-//                            .replace(R.id.fragment_container, homeFragment) // Replace with your container ID
-//                            .commit();
-//                }
+//
 
                 if (getActivity() instanceof FragmentActivity) {
                     FragmentActivity activity = (FragmentActivity) getActivity(); // Declare the activity variable here
@@ -174,21 +155,16 @@ public class Product_Fragment extends Fragment implements PropertyClickListener 
          }
         });
 
-//        back_icon_to_home_page.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                getActivity().getSupportFragmentManager().popBackStack();
-//            }
-//        });
+
 
 
 
         return property_view;
     }
-
+    // Handle item clicks in the RecyclerView
     @Override
     public void onItemClick(int position){
-        ProductListModel current_property=property_list.get(position);
+        ProductListModel current_property= product_lists.get(position);
         int ref_no=current_property.getRef_no();
         Bundle args=new Bundle();
         args.putString("ref_no",Integer.toString(ref_no));
@@ -201,9 +177,10 @@ public class Product_Fragment extends Fragment implements PropertyClickListener 
         transaction.addToBackStack(null);
         transaction.commit();
     }
+    // Handle share clicks in the RecyclerView
     @Override
     public void onShareClick(int position) {
-        ProductListModel product = property_list.get(position);
+        ProductListModel product = product_lists.get(position);
 
         String message = "Check out this product:\n" +
                 "Name: " + product.getProductName() + "\n" +

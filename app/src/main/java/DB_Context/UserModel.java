@@ -1,6 +1,7 @@
 package DB_Context;
 
 public class UserModel {
+    // ... (class members and methods)
     private int id;
     private String username,password;
 
@@ -9,7 +10,7 @@ public class UserModel {
         this.username = username;
         this.password = password;
     }
-
+    // ... (getter and setter methods for each member variable)
     public String getUsername() {
         return username;
     }
